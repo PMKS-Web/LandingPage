@@ -10,9 +10,9 @@ function App() {
         <p>
           Landing Page Coming Soon!
         </p>
-        {/*A button with the link to /app*/}
+        {/*A button with the link to app.pmksplus.com} */}
           <button className="App-Button" onClick={() => {
-              window.location.href = "/app";
+            window.location.href = 'https://app.pmksplus.com/';
           }}>
               Go to App
           </button>
