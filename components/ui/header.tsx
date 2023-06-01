@@ -12,7 +12,7 @@ export default function Header() {
           <div className="shrink-0 mr-4">
             {/* Logo */}
             <Link href="/" className="block" aria-label="Cruip">
-              <Image src={PMKSLogo} height={48}/>
+              <Image src={PMKSLogo} height={48} alt={"PMKS+ Logo"}/>
             </Link>
           </div>
 
