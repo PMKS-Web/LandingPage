@@ -1,3 +1,4 @@
+
 export const metadata = {
   title: 'PMKS+',
   description: 'PMKS+ is a powerful web-based linkage analysis tool that simplifies mechanism design and analysis, enabling users to create, simulate, and optimize planar linkages with ease.',
@@ -9,8 +10,12 @@ import Compare from '@/components/compare'
 import Newsletter from '@/components/newsletter'
 import Zigzag from '@/components/zigzag'
 import Testimonials from '@/components/testimonials'
+import { analytics } from '../../utils/firebase';
 
 export default function Home() {
+
+    analytics();
+
   return (
     <>
       <Hero />

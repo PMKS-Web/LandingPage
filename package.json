@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@firebase/analytics": "^0.10.0",
     "@headlessui/react": "^1.7.14",
     "@types/node": "^20.2.5",
     "@types/react": "^18.2.7",
     "@types/react-dom": "^18.2.4",
     "aos": "^3.0.0-beta.6",
+    "firebase": "^9.22.1",
     "next": "^13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
