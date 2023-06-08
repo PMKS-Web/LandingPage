@@ -1,7 +1,7 @@
 
 export const metadata = {
-  title: 'PMKS+',
-  description: 'PMKS+ is a powerful web-based linkage analysis tool that simplifies mechanism design and analysis, enabling users to create, simulate, and optimize planar linkages with ease.',
+  title: 'PMKS+ | Web-based Linkage Analysis Tool',
+  description: 'Simplify mechanism design and analysis with PMKS+. Create, simulate, and optimize planar linkages effortlessly.',
 }
 
 import Hero from '@/components/hero'
