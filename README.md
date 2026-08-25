@@ -58,12 +58,9 @@ and what the canvas does and does not draw.
 
 | Path | What is in it |
 | --- | --- |
-| `app/(default)/page.tsx` | The page, as a list of its sections |
+| `app/page.tsx` | The page, as a list of its sections |
 | `components/landing/` | Those sections |
 | `components/pmks/` | The mechanism runtime: load, play, draw |
 | `engine/` | The vendored PMKS+ engine and the two asset pipelines |
 | `public/mechanisms/` | Generated — solved geometry, one file per linkage |
 | `public/images/app/` | Generated — screenshots of the running app |
-
-`app/(auth)/` still holds the template's sign-in pages. They are not linked from
-anywhere and are kept only because nothing has replaced them yet.
