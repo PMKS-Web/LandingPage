@@ -67,11 +67,18 @@ const SHOTS = [
     height: 980,
     steps: [
       ['tab', 'Kinematic'],
-      ['traces'],
-      ['play', 1500],
+      // Sample 36 of 361. The crank and the slotted lever it drives are within
+      // twenty degrees of each other all the way round this mechanism, and at
+      // the pose either of them crosses the axis the two lie on top of one
+      // another and the drawing says nothing. This is where they are furthest
+      // apart — and it is also a pose where no readout beside it is a rounding
+      // error printed to seven decimal places.
+      ['pose', 36],
+      ['vectors', 'D'],
       ['selectJoint', 'D'],
       ['expandGraphs', 3],
       ['resetView'],
+      ['zoomOut', 1],
       ['park'],
       ['wait', 900],
     ],
@@ -106,12 +113,28 @@ for (const shot of SHOTS) {
         await page.locator('.tabButton', { hasText: argument }).first().click({ force: true });
       else if (verb === 'click') await page.locator(argument).first().click({ force: true });
       else if (verb === 'wait') await page.waitForTimeout(Number(argument));
+      // A pose by sample rather than by how long playback was left running:
+      // where a mechanism is standing is the whole content of the picture, and
+      // "play for 1500ms" is not a way of saying which pose that is.
+      else if (verb === 'pose')
+        await page.evaluate((sample) => {
+          const grid = window.ng.getComponent(document.querySelector('app-new-grid'));
+          grid.mechanismSrv.animate(Number(sample), false);
+        }, argument);
       else if (verb === 'park') await page.mouse.move(6, shot.height - 40);
       else if (verb === 'traces')
         await page.evaluate(() => {
           const grid = window.ng.getComponent(document.querySelector('app-new-grid'));
           grid.mechanismSrv.joints.forEach((joint) => (joint.showCurve = true));
         });
+      // Velocity drawn on the mechanism itself, which is the sentence the
+      // Analyze section makes beside this picture.
+      else if (verb === 'vectors')
+        await page.evaluate((id) => {
+          const grid = window.ng.getComponent(document.querySelector('app-new-grid'));
+          const joint = grid.mechanismSrv.joints.find((candidate) => candidate.id === id);
+          if (joint) grid.mechanismSrv.toggleVectorTrace(joint, 'velocity');
+        }, argument);
       else if (verb === 'expandGraphs') {
         const headers = page.locator('.graphHeader');
         const count = Math.min(await headers.count(), Number(argument) || 3);
@@ -119,6 +142,13 @@ for (const shot of SHOTS) {
           await headers.nth(index).click({ force: true });
       } else if (verb === 'resetView')
         await page.locator('app-view-controls button').last().click({ force: true });
+      // The fit frames the linkage, and the vector trace reaches well outside
+      // it, so a picture with arrows in it has to give back some of that fit.
+      else if (verb === 'zoomOut')
+        for (let step = 0; step < Number(argument); step += 1) {
+          await page.locator('app-view-controls button').nth(3).click({ force: true });
+          await page.waitForTimeout(200);
+        }
       else if (verb === 'selectJoint')
         await page.evaluate((id) => {
           const grid = window.ng.getComponent(document.querySelector('app-new-grid'));

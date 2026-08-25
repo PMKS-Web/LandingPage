@@ -383,7 +383,7 @@ function Vectors({ data, pose, k }: { data: MechanismData; pose: Pose; k: number
   const [x, y, dx, dy] = pose.live
   return (
     <g pointerEvents="none" fill="none" stroke={data.vectors.ink} strokeLinecap="round">
-      <path d={data.vectors.d} strokeWidth={1.5 / k} opacity={0.45} />
+      <path d={data.vectors.d} strokeWidth={1.5 / k} opacity={data.vectors.traceOpacity} />
       <path d={arrowPath([{ x, y, dx, dy }])} strokeWidth={3 / k} />
       <circle cx={x} cy={y} r={3 / k} fill={data.vectors.ink} stroke="none" />
     </g>

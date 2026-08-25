@@ -62,7 +62,7 @@ export interface MechanismData {
   bodies: Body[];
   sliders: Slider[];
   traces: { i: number; d: string }[];
-  vectors: { ink: string; d: string; live: number[][] } | null;
+  vectors: { ink: string; traceOpacity: number; d: string; live: number[][] } | null;
   /** Per pose, every joint's x and y, in `jointIds` order. */
   frames: number[][];
 }

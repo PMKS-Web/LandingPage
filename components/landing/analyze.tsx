@@ -14,7 +14,7 @@ export default function Analyze() {
       <div className="overflow-hidden rounded-card shadow-card lg:order-1">
         <Image
           src={shot}
-          alt="Kinematic analysis of a Whitworth quick return, with position and velocity graphed"
+          alt="Kinematic analysis of a Whitworth quick return: position, velocity and acceleration graphed for one joint, and its velocity drawn on the mechanism as vectors"
           className="block h-auto w-full"
           sizes="(min-width: 1024px) 45vw, 100vw"
         />

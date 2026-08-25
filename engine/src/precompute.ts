@@ -27,7 +27,7 @@ import { GROUND_STROKE, motorBodyPath, plusPath } from '../vendor/app/model/join
 import { buildVectorTrace, VECTOR_INK } from '../vendor/app/model/vector-trace';
 import { SliderMarkService, type SliderMark } from '../vendor/app/services/slider-mark.service';
 import { buildMechanismAtScale } from '../vendor/test-utils/verification/fixture';
-import { LINKAGES } from './linkages';
+import { LINKAGES, type Linkage } from './linkages';
 
 /**
  * How many poses of a cycle are written out.
@@ -181,7 +181,7 @@ function main() {
 
     let vectors: ReturnType<typeof velocityTrace> = null;
     if (linkage.vectors && traced.length > 0) {
-      vectors = velocityTrace(mechanism, traced[0].i, pick);
+      vectors = velocityTrace(mechanism, traced[0].i, pick, linkage);
     }
 
     const view = bounds(mechanism, sliders);
@@ -285,7 +285,7 @@ function guidesOf(mechanism: any) {
  * in the cycle, plus the live vector at each written pose so the arrow on screen
  * is drawn to the same scale as the ones behind it.
  */
-function velocityTrace(mechanism: any, jointIndex: number, pick: number[]) {
+function velocityTrace(mechanism: any, jointIndex: number, pick: number[], linkage: Linkage) {
   const id = mechanism.joints[0][jointIndex].id;
   const steps = mechanism.joints.length;
   KinematicsSolver.resetVariables();
@@ -308,7 +308,8 @@ function velocityTrace(mechanism: any, jointIndex: number, pick: number[]) {
   if (!shape) return null;
 
   return {
-    ink: VECTOR_INK.velocity,
+    ink: linkage.vectorInk ?? VECTOR_INK.velocity,
+    traceOpacity: linkage.vectorTraceOpacity ?? 0.45,
     d: trimPath(shape.d),
     // The arrow at the pose on screen: tail, then the vector already scaled to
     // the same length the pale arrows behind it were drawn at, so the live one

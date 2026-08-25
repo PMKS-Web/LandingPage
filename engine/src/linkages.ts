@@ -14,6 +14,7 @@
 import type { MechanismFixture } from '../vendor/test-utils/verification/fixture';
 import { MODEL_SCALE } from '../vendor/app/model/render-scale';
 import { PART_COLORS } from '../vendor/app/model/joint-colors';
+import { ANALYSIS_SERIES_COLORS } from '../vendor/app/model/analysis-series';
 
 /** Centimetres to the internal frame everything below is authored in. */
 const cm = (v: number) => v * MODEL_SCALE;
@@ -116,6 +117,24 @@ export interface Linkage {
    * two dozen arrows around the cycle and a heavier one at the live pose.
    */
   vectors?: boolean;
+  /**
+   * What to draw them in, if not the ink the app's canvas uses.
+   *
+   * The canvas draws a velocity vector in the series colour of its y component,
+   * because on a graph the arrow and the curve have to be the same red. On the
+   * hero there is no graph to agree with, and red on an indigo linkage reads as
+   * a warning rather than as a quantity — so it takes the yellow the app plots
+   * *magnitude* in instead, which is the same drawing's other name for the same
+   * arrow's length.
+   */
+  vectorInk?: string;
+  /**
+   * How faint the two dozen path arrows are behind the live one. The canvas
+   * draws them at 0.45, which was chosen against its red; the same alpha on a
+   * yellow lands close to white, because the two inks are nowhere near the same
+   * lightness. Raised here for exactly that reason and no other.
+   */
+  vectorTraceOpacity?: number;
 }
 
 export const LINKAGES: Linkage[] = [
@@ -128,6 +147,8 @@ export const LINKAGES: Linkage[] = [
   {
     id: 'fourbar',
     vectors: true,
+    vectorInk: ANALYSIS_SERIES_COLORS.Z,
+    vectorTraceOpacity: 0.7,
     fixture: fourBar({
       crank: 1.2,
       ground: 3.2,
