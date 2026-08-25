@@ -53,9 +53,14 @@ node engine/sync.mjs ../some/other/path && node engine/build.mjs
 npm run shots
 ```
 
+Writes four pictures into `public/images/app/`: `build` and `analyze` at 1440
+by twice the pixel density, and `phone-grid` and `phone-panel` on a real iPhone
+profile with touch events, so the layout that answers the camera is the one a
+student actually gets.
+
 Needs the app's dev server on `http://localhost:4200` and a Playwright install
 at `/tmp/pmks-playwright` — the arrangement `.claude/skills/ui-validate/SKILL.md`
-in the app repo describes. Writes `public/images/app/`.
+in the app repo describes. `ONLY=analyze npm run shots` retakes one of them.
 
 ## What the page does not draw
 

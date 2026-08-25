@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { arrowPath } from '@/engine/vendor/app/model/vector-trace'
-import type { MechanismData } from './data'
+import type { MechanismData, Ram } from './data'
 import type { Player } from './use-mechanism'
 
 /**
@@ -64,6 +64,9 @@ interface Pose {
   at: number[]
   /** `[x, y, rotation]` per slider, in `sliders` order. */
   sliders: number[][]
+  /** The same, per cylinder, plus which written pose to take its paths from. */
+  cylinders: number[][]
+  frame: number
   live: number[] | null
 }
 
@@ -82,6 +85,15 @@ function poseAt(data: MechanismData, phase: number): Pose {
       lerp(slider.poses[a][1], slider.poses[b][1], t),
       lerpAngle(slider.poses[a][2], slider.poses[b][2], t),
     ]),
+    cylinders: data.cylinders.map((ram) => [
+      lerp(ram.poses[a][0], ram.poses[b][0], t),
+      lerp(ram.poses[a][1], ram.poses[b][1], t),
+      lerpAngle(ram.poses[a][2], ram.poses[b][2], t),
+    ]),
+    // A ram's barrel is a different path at every pose rather than the same one
+    // moved, so it is the one thing here that steps between poses instead of
+    // reading between them.
+    frame: t < 0.5 ? a : b,
     live: data.vectors
       ? data.vectors.live[a].map((v, i) => lerp(v, data.vectors!.live[b][i], t))
       : null,
@@ -105,18 +117,30 @@ export interface MechanismViewProps {
   player: Player
   /**
    * Where the drawing sits when the frame is wider than it needs: 0.5 centres
-   * it, higher pushes it right — the hero holds its copy over the left of the
-   * canvas, so its linkage stands well over on the other side.
+   * it, higher pushes it right.
    */
   align?: number
+  /**
+   * The same, once the drawing is wide enough to hold copy over it. The hero
+   * lays its headline over the left of the canvas on a laptop and puts it
+   * underneath on a phone, so the linkage has to move out of the way in one
+   * case and stay in the middle in the other. Read off the measured width
+   * rather than a media query, because it is the canvas's own width that
+   * decides whether anything is standing on it.
+   */
+  wideAlign?: number
   /** Under 1 leaves air around the linkage; over 1 crops into it. */
   zoom?: number
   className?: string
 }
 
+/** Where the copy starts being laid over the drawing rather than under it. */
+const WIDE = 1024
+
 export default function MechanismView({
   player,
   align = 0.5,
+  wideAlign,
   zoom = 1,
   className,
 }: MechanismViewProps) {
@@ -144,10 +168,11 @@ export default function MechanismView({
     const k = Math.min(size.w / view.w, size.h / view.h) * zoom
     const w = size.w / k
     const h = size.h / k
-    const x = view.x - (w - view.w) * align
+    const sideways = size.w >= WIDE && wideAlign !== undefined ? wideAlign : align
+    const x = view.x - (w - view.w) * sideways
     const y = view.y - (h - view.h) / 2
     return { k, w, h, x, y }
-  }, [data, size, align, zoom])
+  }, [data, size, align, wideAlign, zoom])
 
   const pose = useMemo(() => (data ? poseAt(data, phase) : null), [data, phase])
 
@@ -195,6 +220,7 @@ export default function MechanismView({
             <Bodies data={data} pose={pose} k={frame.k} only={(id) => !isRider(data, id)} />
             <Blocks data={data} pose={pose} lift={`url(#pmks-lift-${data.id})`} k={frame.k} />
             <Bodies data={data} pose={pose} k={frame.k} only={(id) => isRider(data, id)} />
+            <Cylinders data={data} pose={pose} lift={`url(#pmks-lift-${data.id})`} k={frame.k} />
             <Joints data={data} pose={pose} lift={`url(#pmks-lift-${data.id})`} />
             <Traces data={data} />
             <Vectors data={data} pose={pose} k={frame.k} />
@@ -356,6 +382,71 @@ function Blocks({
                 strokeWidth={3 / k}
               />
             )}
+          </g>
+        )
+      })}
+    </g>
+  )
+}
+
+/** One piece of a ram at one pose: the same path throughout, or this pose's. */
+function pieceAt(piece: string | string[], frame: number): string {
+  return typeof piece === 'string' ? piece : piece[frame]
+}
+
+/**
+ * Sealed hydraulic cylinders, drawn as the app draws them: barrel and rod in
+ * the body's own colour at the fill every link wears, the head black between
+ * them. A ram is a part, not a block in a slot, and the links it replaces are
+ * left out of the body layer entirely.
+ */
+function Cylinders({
+  data,
+  pose,
+  lift,
+  k,
+}: {
+  data: MechanismData
+  pose: Pose
+  lift: string
+  k: number
+}) {
+  return (
+    <g pointerEvents="none">
+      {data.cylinders.map((ram: Ram, i) => {
+        const [x, y, rotation] = pose.cylinders[i]
+        return (
+          <g key={ram.id} transform={`translate(${x} ${y}) rotate(${rotation})`}>
+            <path
+              d={pieceAt(ram.barrels, pose.frame)}
+              fill={ram.barrelFill}
+              fillOpacity={0.7}
+              stroke={ram.barrelFill}
+              strokeWidth={3 / k}
+            />
+            <path d={pieceAt(ram.blocks, pose.frame)} fill="#000000" filter={lift} />
+            <path
+              d={pieceAt(ram.rods, pose.frame)}
+              fill={ram.rodFill}
+              fillOpacity={0.7}
+              stroke={ram.rodFill}
+              strokeWidth={3 / k}
+            />
+            {/* Above every body, and only safe in white because what is under
+                them is always the black head. */}
+            {ram.arrows.map((arrow, n) => (
+              <g key={n}>
+                <line
+                  x1={arrow.line[0]}
+                  y1={arrow.line[1]}
+                  x2={arrow.line[2]}
+                  y2={arrow.line[3]}
+                  stroke="#ffffff"
+                  strokeWidth={(arrow.wide ? 4.5 : 2.5) / k}
+                />
+                <path d={arrow.head} fill="#ffffff" />
+              </g>
+            ))}
           </g>
         )
       })}

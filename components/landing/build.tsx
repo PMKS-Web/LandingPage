@@ -16,17 +16,24 @@ export default function Build() {
         <h2 className="mb-3 text-[25px] font-medium leading-[1.2] tracking-[-0.015em] lg:mb-4 lg:text-[34px] lg:leading-[1.15] lg:tracking-[-0.02em]">
           Built the way you&rsquo;d sketch it.
         </h2>
+        {/* One paragraph on a phone, two on a laptop. A column 350 pixels wide
+            turns the second one into fourteen lines, and the list of parts
+            below it into a paragraph of its own. */}
         <p className="mb-4 text-[15.5px] leading-[1.65] text-ink-700 lg:mb-[18px] lg:text-[17px]">
           Lay the bars out the way you would on paper, ground the frame, choose the joint the motor
           turns, and press play. The mechanism moves the moment it can.
+          <span className="lg:hidden">
+            {' '}
+            Weld joints into buckets, ride pins in slots, drive parts with cylinders.
+          </span>
         </p>
-        <p className="mb-5 text-[15.5px] leading-[1.65] text-ink-700 lg:mb-[22px] lg:text-[17px]">
+        <p className="mb-5 hidden text-[15.5px] leading-[1.65] text-ink-700 lg:mb-[22px] lg:block lg:text-[17px]">
           Weld joints to form bell cranks and buckets, ride pins in slots, drive parts with hydraulic
           cylinders, and put a tracer point anywhere you want to watch. You can lay a photo of a real
           machine behind the grid and build your linkage on top of it, and the photo never leaves
           your computer.
         </p>
-        <div className="flex flex-wrap gap-2 lg:gap-2.5">
+        <div className="hidden flex-wrap gap-2 lg:flex lg:gap-2.5">
           {TOOLS.map((tool) => (
             <Pill key={tool}>{tool}</Pill>
           ))}

@@ -3,14 +3,15 @@ import Kicker from './kicker'
 
 /**
  * Six of the library's families, each one running. Different mechanisms, not
- * six views of the same four-bar: a slider-crank, a drag-link, a Scotch yoke, a
- * walking beam, Hoeken's straight line and a six-bar with a slider.
+ * six views of the same four-bar: a slider-crank, an engine with a disc for a
+ * flywheel, a Scotch yoke, a boom worked by a hydraulic ram rather than by a
+ * crank, Hoeken's straight line and a six-bar with a slider.
  */
 const CARDS = [
   { id: 'slider', name: 'Slider-Crank' },
-  { id: 'dragLink', name: 'Drag-Link' },
+  { id: 'flywheel', name: 'Engine with a Flywheel' },
   { id: 'yoke', name: 'Scotch Yoke' },
-  { id: 'pumpjack', name: 'Pumpjack' },
+  { id: 'cylinderBoom', name: 'Cylinder-Driven Boom' },
   { id: 'hoeken', name: 'Hoeken Straight-Line' },
   { id: 'sixbar', name: 'Six-Bar with Slider' },
 ]
@@ -24,9 +25,10 @@ export default function Library() {
           <h2 className="mb-2.5 text-[25px] font-medium leading-[1.2] tracking-[-0.015em] lg:text-[34px] lg:leading-[1.15] lg:tracking-[-0.02em]">
             41 mechanisms, ready to run.
           </h2>
-          <p className="max-w-[46em] text-[15.5px] text-ink-700 lg:text-[17px]">
-            Eight families, from a first slider-crank to a walking beam pump and a six-bar. Every one
-            opens in a click, running, and comes apart under your cursor.
+          <p className="hidden max-w-[46em] text-[15.5px] text-ink-700 lg:block lg:text-[17px]">
+            Eight families, from a first slider-crank to an engine with a flywheel, a boom on a
+            hydraulic ram and a six-bar. Every one opens in a click, running, and comes apart under
+            your cursor.
           </p>
         </div>
         <a
@@ -56,8 +58,8 @@ export default function Library() {
               34 more
             </div>
             <p className="mt-2 max-w-[30em] text-sm leading-[1.55] text-ink-700 lg:text-[15px]">
-              Jansen legs, radial engines, backhoe and loader buckets, scissor lifts, Whitworth quick
-              returns, Watt and Stephenson six-bars.
+              Jansen legs, radial engines, backhoe and loader buckets, walking beam pumps, scissor
+              lifts, Whitworth quick returns, Watt and Stephenson six-bars.
             </p>
           </div>
           <a

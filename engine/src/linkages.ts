@@ -12,6 +12,7 @@
  * app's own frame comes out at the app's own proportions.
  */
 import type { MechanismFixture } from '../vendor/test-utils/verification/fixture';
+import { cylinderBoomFixture } from '../vendor/test-utils/verification/slot-fixtures';
 import { MODEL_SCALE } from '../vendor/app/model/render-scale';
 import { PART_COLORS } from '../vendor/app/model/joint-colors';
 import { ANALYSIS_SERIES_COLORS } from '../vendor/app/model/analysis-series';
@@ -19,8 +20,14 @@ import { ANALYSIS_SERIES_COLORS } from '../vendor/app/model/analysis-series';
 /** Centimetres to the internal frame everything below is authored in. */
 const cm = (v: number) => v * MODEL_SCALE;
 
-/** Ten revolutions a minute: slow enough to follow a coupler point by eye. */
+/**
+ * Ten revolutions a minute: slow enough to follow a coupler point by eye.
+ *
+ * As radians a second, because that is the unit `Mechanism` is commanded in —
+ * the per-joint `driveSpeed` field is the one that takes rpm.
+ */
 const RPM = 10;
+const INPUT = (RPM * 2 * Math.PI) / 60;
 
 const [PALE, INDIGO, NAVY, MINT, TEAL, PINE] = PART_COLORS;
 
@@ -104,7 +111,7 @@ function fourBar(opts: {
       { joints: opts.on === 'coupler' ? 'BCP' : 'BC', fill: INDIGO },
       { joints: opts.on === 'rocker' ? 'CDP' : 'CD', fill: NAVY },
     ],
-    inputAngVel: RPM,
+    inputAngVel: INPUT,
   };
 }
 
@@ -160,19 +167,38 @@ export const LINKAGES: Linkage[] = [
   },
 
   /**
-   * Drag-link: the shortest bar is the ground, so both the bars pinned to it
-   * turn all the way round and the coupler tumbles instead of rocking.
+   * A single-cylinder engine, from the app's own library: a flywheel on the
+   * crankshaft driving a piston down a bore on the crankshaft's centreline.
+   *
+   * The one link on the page drawn as a disc rather than as a bar. The rim pin
+   * is what gives the disc its size — a circular link is drawn as the circle
+   * that reaches its outermost joint — and it sits opposite the crank pin,
+   * where an engine puts its counterweight.
    */
   {
-    id: 'dragLink',
-    fixture: fourBar({
-      crank: 2.2,
-      ground: 1.0,
-      coupler: 1.8,
-      rocker: 2.4,
-      trace: [0.9, 0.8],
-      on: 'coupler',
-    }),
+    id: 'flywheel',
+    fixture: (() => {
+      const rim = 1.4;
+      const stroke = 1.0;
+      const rod = 3.6;
+      const theta = (40 * Math.PI) / 180;
+      const B = { x: Math.cos(theta) * stroke, y: Math.sin(theta) * stroke };
+      const C = { x: B.x + Math.sqrt(Math.max(0, rod * rod - B.y * B.y)), y: 0 };
+      return {
+        joints: [
+          { id: 'A', x: 0, y: 0, ground: true, input: true },
+          { id: 'B', x: cm(B.x), y: cm(B.y) },
+          { id: 'R', x: cm(-rim * Math.cos(theta)), y: cm(-rim * Math.sin(theta)) },
+          { id: 'C', x: cm(C.x), y: cm(C.y) },
+        ],
+        links: [
+          { joints: 'ABR', name: 'Flywheel', fill: PALE, circle: true },
+          { joints: 'BC', name: 'Connecting rod', fill: INDIGO },
+        ],
+        slider: { at: 'C', prisId: 'P', angleRad: 0 },
+        inputAngVel: INPUT,
+      } satisfies MechanismFixture;
+    })(),
   },
 
   /**
@@ -194,20 +220,20 @@ export const LINKAGES: Linkage[] = [
   },
 
   /**
-   * A walking-beam pumping unit, in its four-bar form: the crank nods the beam
-   * and the horsehead — the traced point, out on the far side of the beam's
-   * pivot — swings down the well.
+   * A boom raised by a hydraulic cylinder — the app's own Gate 5 mechanism,
+   * taken as it is written in the verification suite.
+   *
+   * The drive is not a turning crank: it is the cylinder's own length, and the
+   * boom angle follows from it by the law of cosines. So this one does not go
+   * round — it extends, stops, and comes back, which is what a ram does.
+   *
+   * Built at MODEL_SCALE because that is what the fixture's `scale` is for: a
+   * cylinder's stroke is bounded by its own slot, and a slot is drawn in mark
+   * units, which are absolute.
    */
   {
-    id: 'pumpjack',
-    fixture: fourBar({
-      crank: 0.8,
-      ground: 3.4,
-      coupler: 3.0,
-      rocker: 1.6,
-      trace: [-2.6, 0],
-      on: 'rocker',
-    }),
+    id: 'cylinderBoom',
+    fixture: cylinderBoomFixture(MODEL_SCALE),
   },
 
   /**
@@ -236,7 +262,7 @@ export const LINKAGES: Linkage[] = [
           { joints: 'BCP', fill: INDIGO },
         ],
         slider: { at: 'C', prisId: 'S', angleRad: 0 },
-        inputAngVel: RPM,
+        inputAngVel: INPUT,
       } satisfies MechanismFixture;
     })(),
   },
@@ -280,7 +306,7 @@ export const LINKAGES: Linkage[] = [
         // about C. Without it the linkage has a degree of freedom too many and
         // the solver refuses it, exactly as the app would.
         welds: ['C'],
-        inputAngVel: RPM,
+        inputAngVel: INPUT,
       } satisfies MechanismFixture;
     })(),
   },
@@ -327,7 +353,7 @@ export const LINKAGES: Linkage[] = [
           { at: 'A', prisId: 'P', on: { carrier: 'QR', a: 'Q', b: 'R' } },
           { at: 'S', prisId: 'T', angleRad: 0 },
         ],
-        inputAngVel: RPM,
+        inputAngVel: INPUT,
       } satisfies MechanismFixture;
     })(),
   },
@@ -369,7 +395,7 @@ export const LINKAGES: Linkage[] = [
           { joints: 'EF', fill: MINT },
         ],
         slider: { at: 'F', prisId: 'G', angleRad: 0 },
-        inputAngVel: RPM,
+        inputAngVel: INPUT,
       } satisfies MechanismFixture;
     })(),
   },

@@ -26,7 +26,7 @@ const app = resolve(process.argv[2] ?? join(here, '../../Planar-Mechanism-Kinema
 const BASE = process.env.PMKS_BASE_URL ?? 'http://localhost:4200';
 const OUT = join(here, '../public/images/app');
 
-const { chromium } = await import(
+const { chromium, devices } = await import(
   (process.env.PMKS_PLAYWRIGHT_DIR ?? '/tmp/pmks-playwright') + '/node_modules/playwright/index.mjs'
 );
 const { waitForReady } = await import(join(app, 'e2e/app-ready.mjs'));
@@ -43,6 +43,38 @@ const payloads = Object.fromEntries(
 );
 
 const SHOTS = [
+  {
+    // The phone build, on a phone: a real iPhone profile with touch events, so
+    // the layout that answers is the one a student actually gets.
+    name: 'phone-grid',
+    // A scissor lift, because a phone is tall and so is this: a mechanism that
+    // is wider than it is high leaves most of a portrait screen empty grid.
+    template: 'Scissor_Lift',
+    device: 'iPhone 13',
+    steps: [
+      ['tab', 'Kinematic'],
+      ['pose', 170],
+      ['resetView'],
+      ['wait', 700],
+    ],
+  },
+  {
+    // The mode panel as a sheet: what replaces a desktop side panel when there
+    // is no side to put it on.
+    name: 'phone-panel',
+    template: 'Backhoe_Bucket',
+    device: 'iPhone 13',
+    steps: [
+      ['tab', 'Kinematic'],
+      ['pose', 120],
+      ['selectJoint', 'K'],
+      // The mode panel is a sheet on a phone: shut until it is pulled up, and
+      // never more than half the window when it is. Opening it reframes the
+      // drawing into the half that is left, which is the point of the picture.
+      ['click', '.sheetHandle'],
+      ['wait', 1200],
+    ],
+  },
   {
     // What the Build section is about: a welded bucket, and the Edit panel open
     // on one of its joints so the states a joint can be in are all on screen.
@@ -93,12 +125,16 @@ const only = process.env.ONLY?.split(',').map((name) => name.trim());
 
 for (const shot of SHOTS) {
   if (only && !only.includes(shot.name)) continue;
-  const context = await browser.newContext({
-    viewport: { width: shot.width, height: shot.height },
-    // Twice, not the README's 1.2: these sit in a card at roughly half a
-    // 1440-wide page and have to hold up on a retina screen.
-    deviceScaleFactor: 2,
-  });
+  const context = await browser.newContext(
+    shot.device
+      ? { ...devices[shot.device], isMobile: true, hasTouch: true }
+      : {
+          viewport: { width: shot.width, height: shot.height },
+          // Twice, not the README's 1.2: these sit in a card at roughly half a
+          // 1440-wide page and have to hold up on a retina screen.
+          deviceScaleFactor: 2,
+        }
+  );
   await context.addInitScript(() => localStorage.setItem('tutorialSeen', 'true'));
   const page = await context.newPage();
   const payload = payloads[shot.template];
@@ -121,7 +157,7 @@ for (const shot of SHOTS) {
           const grid = window.ng.getComponent(document.querySelector('app-new-grid'));
           grid.mechanismSrv.animate(Number(sample), false);
         }, argument);
-      else if (verb === 'park') await page.mouse.move(6, shot.height - 40);
+      else if (verb === 'park') await page.mouse.move(6, (shot.height ?? 800) - 40);
       else if (verb === 'traces')
         await page.evaluate(() => {
           const grid = window.ng.getComponent(document.querySelector('app-new-grid'));
@@ -147,6 +183,13 @@ for (const shot of SHOTS) {
       else if (verb === 'zoomOut')
         for (let step = 0; step < Number(argument); step += 1) {
           await page.locator('app-view-controls button').nth(3).click({ force: true });
+          await page.waitForTimeout(200);
+        }
+      // A phone is tall and a linkage is wide, so a plain fit leaves most of the
+      // screen empty grid.
+      else if (verb === 'zoomIn')
+        for (let step = 0; step < Number(argument); step += 1) {
+          await page.locator('app-view-controls button').nth(4).click({ force: true });
           await page.waitForTimeout(200);
         }
       else if (verb === 'selectJoint')

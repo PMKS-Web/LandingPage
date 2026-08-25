@@ -25,7 +25,11 @@ import { DEFAULT_OBJECT_SCALE } from '../vendor/app/model/object-scale';
 import { mergedChannels } from '../vendor/app/model/compound-link-path';
 import { GROUND_STROKE, motorBodyPath, plusPath } from '../vendor/app/model/joint-marks';
 import { buildVectorTrace, VECTOR_INK } from '../vendor/app/model/vector-trace';
-import { SliderMarkService, type SliderMark } from '../vendor/app/services/slider-mark.service';
+import {
+  SliderMarkService,
+  type CylinderMark,
+  type SliderMark,
+} from '../vendor/app/services/slider-mark.service';
 import { buildMechanismAtScale } from '../vendor/test-utils/verification/fixture';
 import { LINKAGES, type Linkage } from './linkages';
 
@@ -100,7 +104,16 @@ function main() {
     // A welded rider is drawn by its block's weld plate instead of on its own:
     // the plate is rider and block fused into one outline, so drawing both
     // would put the rider's edge inside the plate and double its alpha.
-    const restMarks = marker.marks(restJoints, MARK_R, guidesOf(mechanism));
+    //
+    // A sealed cylinder goes further: its skin stands in for the barrel link,
+    // the rod link and the ordinary slider mark all three, so none of them is
+    // drawn on its own either.
+    const restCylinders = marker.cylinderMarks(restJoints, MARK_R);
+    const skinned = new Set(restCylinders.flatMap((cyl) => [cyl.barrelId, cyl.rodId]));
+    const sealedPins = new Set(restCylinders.map((cyl) => cyl.pin.id));
+    const restMarks = marker
+      .marks(restJoints, MARK_R, guidesOf(mechanism))
+      .filter((mark) => !sealedPins.has((mark.pin as { id: string }).id));
     const plated = new Set(
       restMarks.flatMap((mark) => (mark.plate ? mark.plate.links.map((l) => l.id) : []))
     );
@@ -108,7 +121,7 @@ function main() {
     const bodies: (Rigid & { id: string; fill: string })[] = [];
     for (const link of mechanism.links[0]) {
       if (!(link instanceof RealLink) || link instanceof SliderBlock) continue;
-      if (plated.has(link.id)) continue;
+      if (plated.has(link.id) || skinned.has(link.id)) continue;
       const cuts = channels.filter((c) => c.carrierId === link.id).map((c) => c.path);
       // A driven pin that is not grounded wears its motor case as part of the
       // body it is bolted to, exactly as `outlineWithMotor` adds it.
@@ -157,11 +170,42 @@ function main() {
       poses: [] as number[][],
     }));
 
+    // The ram's skin: barrel and head are fixed in the cylinder's own frame, so
+    // they are written once; the rod is the thing that moves and is written per
+    // pose. Asserted rather than assumed, below.
+    const cylinders = restCylinders.map((cyl) => ({
+      id: cyl.id,
+      barrelFill: cyl.barrelFill,
+      rodFill: cyl.rodFill,
+      // Which way a driven ram sets off, in its own frame: two white arrows on
+      // the black head, the leading one heavier. A function of the mark size
+      // and the direction only, so it never moves relative to the head.
+      arrows: cyl.arrows.map((arrow) => ({
+        line: seg(arrow.line),
+        head: trimPath(arrow.head),
+        wide: arrow.emphasised,
+      })),
+      barrels: [] as string[],
+      blocks: [] as string[],
+      rods: [] as string[],
+      poses: [] as number[][],
+    }));
+
     for (const t of pick) {
       const marks = marker.marks(mechanism.joints[t], MARK_R, guidesOf(mechanism));
       sliders.forEach((slider) => {
         const at = marks.find((m: SliderMark) => m.id === slider.id);
         slider.poses.push(at ? [round(at.x), round(at.y), round(at.rotation)] : [0, 0, 0]);
+      });
+
+      const skins = marker.cylinderMarks(mechanism.joints[t], MARK_R);
+      cylinders.forEach((ram) => {
+        const at = skins.find((c: CylinderMark) => c.id === ram.id);
+        if (!at) throw new Error(`${linkage.id}: cylinder ${ram.id} vanishes part way round`);
+        ram.barrels.push(trimPath(at.barrel));
+        ram.blocks.push(trimPath(at.block));
+        ram.rods.push(trimPath(at.rod));
+        ram.poses.push([round(at.x), round(at.y), round(at.rotation)]);
       });
     }
 
@@ -190,9 +234,15 @@ function main() {
       id: linkage.id,
       objectScale: OBJECT_SCALE,
       modelScale: MODEL_SCALE,
-      rpm: linkage.fixture.inputAngVel,
-      /** Seconds of real time one written cycle stands for. */
-      period: 60 / Math.abs(linkage.fixture.inputAngVel),
+      /**
+       * Seconds of real time one written cycle stands for, as the mechanism
+       * itself reports it. Not 60/rpm: a cylinder-driven machine is commanded
+       * in length rather than in revolutions, and it reverses rather than
+       * closing, so its cycle is nothing the input speed alone can say.
+       */
+      period: round(mechanism.cyclePeriod) || 6,
+      /** Whether the drive turns the whole way round, or goes and comes back. */
+      reciprocates: mechanism.reciprocates,
       view,
       jointIds,
       // Every stroke and radius the drawing needs, resolved here against the
@@ -224,6 +274,14 @@ function main() {
         }),
       bodies,
       sliders,
+      // A piece whose path is the same at every pose is written once. Most of a
+      // ram is: only the rod's reach actually changes as it strokes.
+      cylinders: cylinders.map((ram) => ({
+        ...ram,
+        barrels: still(ram.barrels),
+        blocks: still(ram.blocks),
+        rods: still(ram.rods),
+      })),
       traces,
       vectors,
       frames,
@@ -234,11 +292,17 @@ function main() {
     index.push({ id: linkage.id, bytes: text.length });
     console.log(
       `${linkage.id.padEnd(10)} ${String(steps).padStart(4)} poses solved  ` +
-        `${bodies.length} bodies  ${sliders.length} sliders  ${(text.length / 1024).toFixed(1)} kB`
+        `${bodies.length} bodies  ${sliders.length} sliders  ${cylinders.length} rams  ` +
+        `${payload.period.toFixed(1)}s  ${(text.length / 1024).toFixed(1)} kB`
     );
   }
 
   writeFileSync(join(out, 'index.json'), JSON.stringify(index));
+}
+
+/** One string if every pose drew the same thing, the whole list if not. */
+function still(frames: string[]): string | string[] {
+  return frames.every((one) => one === frames[0]) ? frames[0] : frames;
 }
 
 function seg(s: { x1: number; y1: number; x2: number; y2: number }) {

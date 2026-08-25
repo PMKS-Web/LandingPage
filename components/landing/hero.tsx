@@ -21,7 +21,7 @@ export default function Hero() {
       <div className="relative">
         <MechanismView
           player={player}
-          align={0.86}
+          wideAlign={0.86}
           className="h-[290px] w-full lg:h-[540px]"
         />
         {/* On a phone the transport rides the bottom of the canvas, because the

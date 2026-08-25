@@ -13,9 +13,9 @@ export default function Footer() {
         successor to PMKS by Prof. Matthew I. Campbell, Oregon State University. Open source under
         the MIT license.
       </p>
-      <div className="flex flex-wrap gap-x-[18px] gap-y-2 whitespace-nowrap text-[13px] text-indigo-50 lg:gap-7 lg:text-[13.5px]">
+      <div className="-my-2 flex flex-wrap gap-x-[18px] whitespace-nowrap text-[13px] text-indigo-50 lg:my-0 lg:gap-7 lg:text-[13.5px]">
         {LINKS.map((link) => (
-          <a key={link.label} href={link.href} className="hover:opacity-75">
+          <a key={link.label} href={link.href} className="py-2 hover:opacity-75 lg:py-0">
             {link.label}
           </a>
         ))}

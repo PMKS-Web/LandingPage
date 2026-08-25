@@ -3,6 +3,7 @@ import Hero from '@/components/landing/hero'
 import Classroom from '@/components/landing/classroom'
 import Build from '@/components/landing/build'
 import Analyze from '@/components/landing/analyze'
+import Phone from '@/components/landing/phone'
 import Share from '@/components/landing/share'
 import Library from '@/components/landing/library'
 import Instructors from '@/components/landing/instructors'
@@ -25,6 +26,7 @@ export default function Home() {
       <Classroom />
       <Build />
       <Analyze />
+      <Phone />
       <Share />
       <Library />
       <Instructors />

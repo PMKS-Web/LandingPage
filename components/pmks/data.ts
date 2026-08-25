@@ -34,13 +34,32 @@ export interface Slider {
   poses: number[][];
 }
 
+/**
+ * A sealed hydraulic cylinder, drawn as the part it is rather than as a block
+ * in a slot. Each piece is one path if it holds its shape at every pose and a
+ * path per pose if it does not — only a ram's visible barrel actually changes.
+ */
+export interface Ram {
+  id: string;
+  barrelFill: string;
+  rodFill: string;
+  /** Which way a driven ram sets off, in its own frame. */
+  arrows: { line: number[]; head: string; wide: boolean }[];
+  barrels: string | string[];
+  blocks: string | string[];
+  rods: string | string[];
+  /** `[x, y, rotationDegrees]` at each written pose. */
+  poses: number[][];
+}
+
 export interface MechanismData {
   id: string;
   objectScale: number;
   modelScale: number;
-  rpm: number;
   /** Seconds of real time one written cycle stands for. */
   period: number;
+  /** Whether the drive turns the whole way round, or goes and comes back. */
+  reciprocates: boolean;
   view: { x: number; y: number; w: number; h: number };
   style: {
     jointFill: string;
@@ -61,6 +80,7 @@ export interface MechanismData {
   }[];
   bodies: Body[];
   sliders: Slider[];
+  cylinders: Ram[];
   traces: { i: number; d: string }[];
   vectors: { ink: string; traceOpacity: number; d: string; live: number[][] } | null;
   /** Per pose, every joint's x and y, in `jointIds` order. */

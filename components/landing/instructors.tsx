@@ -32,26 +32,37 @@ export default function Instructors() {
           </h2>
           <p className="mb-4 text-[15.5px] leading-[1.65] text-ink-700 lg:mb-[18px] lg:text-[17px]">
             PMKS+ is free for every student, with no accounts to provision and nothing to install. A
-            link in the syllabus is the whole rollout. When a student&rsquo;s mechanism cannot be
-            analyzed yet, the app explains exactly what is missing and takes them to it, and a built
-            in tutorial walks them from a blank grid to their first velocity graph.
+            link in the syllabus is the whole rollout.
+            <span className="hidden lg:inline">
+              {' '}
+              When a student&rsquo;s mechanism cannot be analyzed yet, the app explains exactly what
+              is missing and takes them to it, and a built in tutorial walks them from a blank grid
+              to their first velocity graph.
+            </span>
           </p>
           <p className="mb-[18px] text-[15.5px] leading-[1.65] text-ink-700 lg:mb-6 lg:text-[17px]">
-            In use in many courses at Worcester Polytechnic Institute, and at Oregon State for years
-            before that. The code is open source under MIT.
+            Used in courses at Worcester Polytechnic Institute and Oregon State for years. The code
+            is open source under MIT.
           </p>
           <a
             href="mailto:help@pmksplus.com"
             className="inline-block rounded bg-indigo-500 px-[18px] py-3.5 text-sm text-white hover:opacity-90 lg:px-6 lg:py-[15px] lg:text-[15px]"
           >
-            Course adoption: help@pmksplus.com
+            <span className="lg:hidden">help@pmksplus.com</span>
+            <span className="hidden lg:inline">Course adoption: help@pmksplus.com</span>
           </a>
         </div>
 
         {/* Seven rows and six columns will not fit a phone, and shrinking the
             type until it does makes the comparison unreadable rather than
-            small. It scrolls sideways inside its own card instead. */}
-        <div className="min-w-0 overflow-x-auto rounded-card bg-white p-5 shadow-card lg:p-[28px_32px]">
+            small. It scrolls sideways inside its own card instead — said out
+            loud on a phone, because a table that runs off the edge with no
+            scrollbar under it looks like a table that has been cut off. */}
+        <div className="min-w-0">
+          <Kicker tone="grey" className="mb-2 lg:hidden">
+            Swipe the table sideways
+          </Kicker>
+          <div className="min-w-0 overflow-x-auto rounded-card bg-white p-5 shadow-card lg:p-[28px_32px]">
           <table className="w-full min-w-[600px] border-collapse text-sm">
             <thead>
               <tr>
@@ -92,7 +103,8 @@ export default function Instructors() {
                 </tr>
               ))}
             </tbody>
-          </table>
+            </table>
+          </div>
         </div>
       </div>
     </section>
