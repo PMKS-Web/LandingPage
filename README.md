@@ -1,11 +1,30 @@
 # pmksplus.com
 
-The landing page for [PMKS+](https://app.pmksplus.com), a planar mechanism
-kinematic simulator built at Worcester Polytechnic Institute. Next.js 13 (App
-Router) and Tailwind, deployed as a static site.
+The landing page for PMKS+.
 
-Built originally on [Open](https://github.com/cruip/open-react-template) by
-Cruip; the page itself has since been rewritten.
+**The app itself is at [app.pmksplus.com](https://app.pmksplus.com)** — free, in
+the browser, no account. Its source is in
+[Planar-Mechanism-Kinematic-Simulator](https://github.com/PMKS-Web/Planar-Mechanism-Kinematic-Simulator).
+
+## What PMKS+ is
+
+A planar mechanism kinematic simulator, developed at Worcester Polytechnic
+Institute by student project teams as the successor to PMKS by Prof. Matthew I.
+Campbell at Oregon State. You draw a linkage the way you would sketch it, ground
+the frame, choose the joint the motor turns, and it runs: four-bars,
+slider-cranks, six-bars and whole machines, with welds, pins in slots, hydraulic
+cylinders and tracer points. It gives back position, velocity and acceleration
+for any joint or link, and joint reactions and motor torque in static
+equilibrium or full dynamics — exportable as CSV, an Excel workbook or a print
+ready report. A whole mechanism packs into one URL, so a class can pass them
+around like messages. Free and open source under MIT.
+
+## What this repo is
+
+The marketing page in front of it: Next.js 13 (App Router) and Tailwind,
+deployed as a static site. Built originally on
+[Open](https://github.com/cruip/open-react-template) by Cruip; the page itself
+has since been rewritten.
 
 ## Running it
 
@@ -26,12 +45,12 @@ lays out what the app produced and moves it.
 
 ```bash
 npm run mechanisms   # re-solve the linkages after editing engine/src/linkages.ts
-npm run shots        # retake the app screenshots the Build and Analyze sections embed
+npm run shots        # retake the app screenshots the Build, Analyze and phone sections embed
 ```
 
 Both read from a checkout of
-[Planar-Mechanism-Kinematic-Simulator](https://github.com/PMKS-Web) beside this
-repo; `npm run shots` also wants that app's dev server up on port 4200. See
+[Planar-Mechanism-Kinematic-Simulator](https://github.com/PMKS-Web/Planar-Mechanism-Kinematic-Simulator)
+beside this repo; `npm run shots` also wants that app's dev server up on port 4200. See
 [`engine/README.md`](engine/README.md) for what is vendored, how to re-sync it,
 and what the canvas does and does not draw.
 
