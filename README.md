@@ -45,14 +45,24 @@ lays out what the app produced and moves it.
 
 ```bash
 npm run mechanisms   # re-solve the linkages after editing engine/src/linkages.ts
-npm run shots        # retake the app screenshots the Build, Analyze and phone sections embed
+npm run shots        # retake the screenshots the page embeds, and the social card
 ```
 
 Both read from a checkout of
 [Planar-Mechanism-Kinematic-Simulator](https://github.com/PMKS-Web/Planar-Mechanism-Kinematic-Simulator)
-beside this repo; `npm run shots` also wants that app's dev server up on port 4200. See
-[`engine/README.md`](engine/README.md) for what is vendored, how to re-sync it,
-and what the canvas does and does not draw.
+beside this repo; `npm run shots` also wants that app's dev server up on port
+4200, and — for the social card, which is a photograph of this page's own first
+screen — this page running too. See [`engine/README.md`](engine/README.md) for
+what is vendored, how to re-sync it, and what the canvas does and does not draw.
+
+## Images
+
+`next/image` is set to `unoptimized`, so the five pictures on the page are
+served exactly as they sit in `public/`. The default loader answers from a
+`/_next/image` endpoint that only exists where a Next server is running, and a
+host that serves the build as files has nothing behind it — every picture comes
+up broken. `npm run shots` already writes each one at the width the page serves
+it at, so there is nothing lost by that.
 
 ## Layout
 
@@ -64,3 +74,4 @@ and what the canvas does and does not draw.
 | `engine/` | The vendored PMKS+ engine and the two asset pipelines |
 | `public/mechanisms/` | Generated — solved geometry, one file per linkage |
 | `public/images/app/` | Generated — screenshots of the running app |
+| `public/images/social-card.png` | Generated — the link preview, shot from this page |
