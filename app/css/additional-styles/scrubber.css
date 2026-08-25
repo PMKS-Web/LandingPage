@@ -1,0 +1,43 @@
+/*
+ * The hero's scrub bar.
+ *
+ * Replaces the template's own range-slider rules, which set the thumb's size
+ * from a variable that never resolved -- so the handle came out zero pixels
+ * across and the control looked like a plain grey bar you could not grab.
+ *
+ * A thin track and a small round handle in the app's indigo: the same shape as
+ * the playback scrubber in PMKS+ itself, which is what this one stands in for.
+ */
+.scrubber {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 999px;
+    background: #E0E2EC;
+    cursor: pointer;
+}
+
+.scrubber::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border: 0;
+    border-radius: 50%;
+    background: #3f51b5;
+    cursor: pointer;
+}
+
+.scrubber::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border: 0;
+    border-radius: 50%;
+    background: #3f51b5;
+    cursor: pointer;
+}
+
+.scrubber:focus-visible {
+    outline: 2px solid #3f51b5;
+    outline-offset: 3px;
+}

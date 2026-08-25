@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "mechanisms": "node engine/build.mjs",
+    "shots": "node engine/shots.mjs"
   },
   "dependencies": {
     "@firebase/analytics": "^0.10.0",
@@ -25,7 +27,11 @@
     "@tailwindcss/forms": "^0.5.3",
     "@types/aos": "^3.0.4",
     "autoprefixer": "^10.4.14",
+    "esbuild": "^0.28.2",
+    "hull.js": "github:AndriiHeonia/hull#v1.0.13",
+    "polygon-clipping": "^0.15.7",
     "postcss": "^8.4.24",
+    "rxjs": "^7.8.2",
     "tailwindcss": "^3.3.2"
   }
 }

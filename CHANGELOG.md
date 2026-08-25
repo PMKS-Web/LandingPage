@@ -1,5 +1,13 @@
 # CHANGELOG.md
 
+## [4.0.0] - 2026-08-25
+
+Rebuilt the page around live mechanisms. The four-bar in the hero, the quick
+return in the sharing panel and the six library cards are solved and drawn by
+PMKS+'s own engine, vendored under `engine/`; the Build and Analyze screenshots
+are retaken from the running app at retina density. The template's own landing
+sections are gone.
+
 ## [3.2.0] - 2023-05-31
 
 Update dependencies and fix some issues

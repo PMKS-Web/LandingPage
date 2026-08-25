@@ -1,0 +1,25 @@
+const LINKS = [
+  { label: 'Open PMKS+', href: 'https://app.pmksplus.com' },
+  { label: 'GitHub', href: 'https://github.com/PMKS-Web' },
+  { label: 'Mechanism library', href: '#library' },
+  { label: 'Contact', href: 'mailto:help@pmksplus.com' },
+]
+
+export default function Footer() {
+  return (
+    <footer className="bg-indigo-900 px-5 pb-9 pt-7 text-indigo-200 lg:flex lg:items-start lg:justify-between lg:gap-16 lg:px-14 lg:py-[52px]">
+      <p className="mb-4 max-w-[44em] text-[12.5px] leading-[1.7] lg:mb-0 lg:text-[13.5px]">
+        PMKS+ is developed at Worcester Polytechnic Institute by student project teams, as the
+        successor to PMKS by Prof. Matthew I. Campbell, Oregon State University. Open source under
+        the MIT license.
+      </p>
+      <div className="flex flex-wrap gap-x-[18px] gap-y-2 whitespace-nowrap text-[13px] text-indigo-50 lg:gap-7 lg:text-[13.5px]">
+        {LINKS.map((link) => (
+          <a key={link.label} href={link.href} className="hover:opacity-75">
+            {link.label}
+          </a>
+        ))}
+      </div>
+    </footer>
+  )
+}

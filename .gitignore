@@ -93,3 +93,5 @@ fabric.properties
 
 #
 .next
+# TypeScript incremental build cache
+tsconfig.tsbuildinfo

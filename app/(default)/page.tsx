@@ -1,29 +1,35 @@
+import Header from '@/components/landing/header'
+import Hero from '@/components/landing/hero'
+import Classroom from '@/components/landing/classroom'
+import Build from '@/components/landing/build'
+import Analyze from '@/components/landing/analyze'
+import Share from '@/components/landing/share'
+import Library from '@/components/landing/library'
+import Instructors from '@/components/landing/instructors'
+import Cta from '@/components/landing/cta'
+import Footer from '@/components/landing/footer'
+import Analytics from '@/components/landing/analytics'
 
 export const metadata = {
   title: 'PMKS+ | Web-based Linkage Analysis Tool',
-  description: 'Simplify mechanism design and analysis with PMKS+. Create, simulate, and optimize planar linkages effortlessly.',
+  description:
+    'Build and simulate planar mechanisms in your browser. Position, velocity, acceleration and forces, with no installation, account or upload.',
 }
 
-import Hero from '@/components/hero'
-import Features from '@/components/features'
-import Compare from '@/components/compare'
-import Newsletter from '@/components/newsletter'
-import Zigzag from '@/components/zigzag'
-import Testimonials from '@/components/testimonials'
-import { analytics } from '../../utils/firebase';
-
 export default function Home() {
-
-    analytics();
-
   return (
     <>
+      <Analytics />
+      <Header />
       <Hero />
-      {/*<Features />*/}
-      <Zigzag />
-         <Compare/>
-      {/*<Testimonials />*/}
-      <Newsletter />
+      <Classroom />
+      <Build />
+      <Analyze />
+      <Share />
+      <Library />
+      <Instructors />
+      <Cta />
+      <Footer />
     </>
   )
 }
