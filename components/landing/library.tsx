@@ -3,10 +3,15 @@ import Kicker from './kicker'
 import { APP_LIBRARY } from './links'
 
 /**
- * Six of the library's families, each one running. Different mechanisms, not
- * six views of the same four-bar: a slider-crank, an engine with a disc for a
- * flywheel, a Scotch yoke, a boom worked by a hydraulic ram rather than by a
- * crank, Hoeken's straight line and a six-bar with a slider.
+ * Six of the library's forty-two, each one running.
+ *
+ * The count is the catalogue's, minus the three drawings it only offers in a
+ * development build: `template-catalog.ts` in the app, counted by category.
+ *
+ * Different mechanisms, not six views of the same four-bar: a slider-crank, an
+ * engine with a disc for a flywheel, a Scotch yoke, a boom worked by a
+ * hydraulic ram rather than by a crank, Hoeken's straight line and a six-bar
+ * with a slider.
  */
 const CARDS = [
   { id: 'slider', name: 'Slider-Crank' },
@@ -24,7 +29,7 @@ export default function Library() {
         <div>
           <Kicker className="mb-3 lg:mb-4">Library</Kicker>
           <h2 className="mb-2.5 text-[25px] font-medium leading-[1.2] tracking-[-0.015em] lg:text-[34px] lg:leading-[1.15] lg:tracking-[-0.02em]">
-            41 mechanisms, ready to run.
+            42 mechanisms, ready to run.
           </h2>
           <p className="hidden max-w-[46em] text-[15.5px] text-ink-700 lg:block lg:text-[17px]">
             Eight families, from a first slider-crank to an engine with a flywheel, a boom on a
@@ -56,11 +61,11 @@ export default function Library() {
         <div className="col-span-2 flex flex-col justify-between rounded-card bg-indigo-50 p-5 lg:p-[26px_28px]">
           <div>
             <div className="text-[26px] font-medium tracking-[-0.025em] text-indigo-700 lg:text-[32px]">
-              34 more
+              36 more
             </div>
             <p className="mt-2 max-w-[30em] text-sm leading-[1.55] text-ink-700 lg:text-[15px]">
-              Jansen legs, radial engines, backhoe and loader buckets, walking beam pumps, scissor
-              lifts, Whitworth quick returns, Watt and Stephenson six-bars.
+              Jansen legs, radial engines, an aircraft&rsquo;s landing gear, backhoe and loader
+              buckets, walking beam pumps, scissor lifts, Watt and Stephenson six-bars.
             </p>
           </div>
           <a
