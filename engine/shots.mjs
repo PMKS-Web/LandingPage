@@ -78,6 +78,7 @@ const SHOTS = [
     // is wider than it is high leaves most of a portrait screen empty grid.
     template: 'Scissor_Lift',
     device: 'iPhone 13',
+    expect: 'analysis',
     steps: [
       ['tab', 'Kinematic'],
       ['pose', 170],
@@ -92,6 +93,7 @@ const SHOTS = [
     deliver: 700,
     template: 'Backhoe_Bucket',
     device: 'iPhone 13',
+    expect: 'analysis',
     steps: [
       ['tab', 'Kinematic'],
       ['pose', 120],
@@ -112,12 +114,18 @@ const SHOTS = [
     height: 900,
     deliver: 1440,
     steps: [
+      // Back to the start first. Edit is only Edit while the mechanism is at
+      // rest: away from sample zero the panel replaces itself with a warning
+      // that editing is paused, which is not what a section called Build
+      // should be a picture of.
+      ['pose', 0],
       ['tab', 'Edit'],
       ['selectJoint', 'B'],
       ['resetView'],
       ['park'],
       ['wait', 600],
     ],
+    expect: 'edit',
   },
   {
     // What the Analyze section is about: a quick return part way through its
@@ -127,6 +135,7 @@ const SHOTS = [
     width: 1440,
     height: 980,
     deliver: 1440,
+    expect: 'analysis',
     steps: [
       ['tab', 'Kinematic'],
       // Sample 36 of 361. The crank and the slotted lever it drives are within
@@ -191,7 +200,17 @@ for (const shot of SHOTS) {
   await context.addInitScript(() => localStorage.setItem('tutorialSeen', 'true'));
   const page = await context.newPage();
   if (shot.site) {
-    await page.goto(SITE, { waitUntil: 'networkidle' });
+    // Not fatal: the app's own pictures should still be taken by a run started
+    // without this page up.
+    const reached = await page
+      .goto(SITE, { waitUntil: 'networkidle' })
+      .then(() => true)
+      .catch(() => false);
+    if (!reached) {
+      missed.push(`${shot.name}: nothing answering at ${SITE} — is \`npm run dev\` up?`);
+      await context.close();
+      continue;
+    }
     // The hero solves and draws itself on the client; nothing worth
     // photographing exists until it has.
     await page
@@ -208,8 +227,23 @@ for (const shot of SHOTS) {
 
   try {
     for (const [verb, argument] of shot.steps) {
-      if (verb === 'tab')
-        await page.locator('.tabButton', { hasText: argument }).first().click({ force: true });
+      if (verb === 'tab') {
+        // Pressed until it takes. A mode press lands on a control the app may
+        // still be wiring up, and a press that does nothing leaves every step
+        // after it working on the wrong panel — which is exactly how a picture
+        // of the Analyze mode came out showing the Edit one.
+        const tab = page.locator('.tabButton', { hasText: argument }).first();
+        for (let go = 0; go < 4; go += 1) {
+          await tab.click({ force: true });
+          await page.waitForTimeout(400);
+          const landed = await page.evaluate(
+            (want) => new RegExp(want, 'i').test(document.querySelector('#bottomBar')?.textContent ?? ''),
+            argument
+          );
+          if (landed) break;
+          if (go === 3) missed.push(`${shot.name}: the ${argument} tab would not take`);
+        }
+      }
       else if (verb === 'click') await page.locator(argument).first().click({ force: true });
       else if (verb === 'wait') await page.waitForTimeout(Number(argument));
       // A pose by sample rather than by how long playback was left running:
@@ -270,6 +304,26 @@ for (const shot of SHOTS) {
     }
   } catch (error) {
     missed.push(`${shot.name}: ${String(error).split('\n')[0]}`);
+  }
+
+  // A silently-failed step is the failure mode this whole script has: a tab
+  // click that did not land leaves the app in some other mode and the shot
+  // still gets written, looking almost right. So every picture says what it is
+  // supposed to be showing, and is asked before the shutter.
+  if (shot.expect) {
+    const wrong = await page.evaluate((want) => {
+      const mode = document.querySelector('#bottomBar')?.textContent ?? '';
+      // The Edit panel replaces itself with this when the mechanism is not at
+      // the start of its cycle. It is a correct thing for the app to say and a
+      // useless thing for a screenshot to show. Asked of what is on screen, not
+      // of what is in the document: the panels the app is not showing are still
+      // built, and one of them is always the Edit panel.
+      const paused = document.querySelector('#placeholderContainer');
+      if (paused && paused.getClientRects().length > 0) return 'editing is paused';
+      if (want === 'edit') return /Edit/.test(mode) ? '' : `mode is "${mode.trim()}"`;
+      return /Kinematic|Force/.test(mode) ? '' : `mode is "${mode.trim()}"`;
+    }, shot.expect);
+    if (wrong) missed.push(`${shot.name}: ${wrong}`);
   }
 
   const file = shot.site

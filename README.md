@@ -55,6 +55,21 @@ beside this repo; `npm run shots` also wants that app's dev server up on port
 screen — this page running too. See [`engine/README.md`](engine/README.md) for
 what is vendored, how to re-sync it, and what the canvas does and does not draw.
 
+`npm run shots` checks what it took: every picture says which mode of the app it
+is supposed to be showing, the script asks the page before the shutter, and it
+exits non-zero if the answer is wrong. A mode press that quietly did not land is
+how a picture of the Analyze mode once shipped showing the Edit one.
+
+## The social card
+
+`public/images/social-card.png` is a photograph of this page's own first screen,
+so a link preview cannot drift from the page it previews.
+
+`og:image` has to be an absolute URL, and a deploy preview is not pmksplus.com —
+a card pointing at pmksplus.com from a preview fetches whatever is live there
+instead. Set `NEXT_PUBLIC_SITE_URL` in the preview's environment to have it
+describe itself.
+
 ## Images
 
 `next/image` is set to `unoptimized`, so the five pictures on the page are
