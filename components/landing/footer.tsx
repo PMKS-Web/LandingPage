@@ -1,8 +1,10 @@
+import { APP, APP_LIBRARY, CONTACT, GITHUB } from './links'
+
 const LINKS = [
-  { label: 'Open PMKS+', href: 'https://app.pmksplus.com' },
-  { label: 'GitHub', href: 'https://github.com/PMKS-Web' },
-  { label: 'Mechanism library', href: '#library' },
-  { label: 'Contact', href: 'mailto:help@pmksplus.com' },
+  { label: 'Open PMKS+', href: APP },
+  { label: 'GitHub', href: GITHUB },
+  { label: 'Mechanism library', href: APP_LIBRARY },
+  { label: 'Contact', href: CONTACT },
 ]
 
 export default function Footer() {

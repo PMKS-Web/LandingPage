@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { APP, GITHUB } from './links'
 import logo from '@/public/images/PMKS_logo.png'
 
 const NAV = [
@@ -6,7 +7,7 @@ const NAV = [
   { label: 'Analyze', href: '#analyze' },
   { label: 'Library', href: '#library' },
   { label: 'For instructors', href: '#instructors' },
-  { label: 'GitHub', href: 'https://github.com/PMKS-Web' },
+  { label: 'GitHub', href: GITHUB },
 ]
 
 export default function Header() {
@@ -22,7 +23,7 @@ export default function Header() {
           </a>
         ))}
         <a
-          href="https://app.pmksplus.com"
+          href={APP}
           className="rounded bg-indigo-500 px-4 py-2.5 text-[13px] font-medium text-white hover:opacity-90 lg:px-5 lg:py-[11px] lg:text-[14.5px]"
         >
           Open PMKS+

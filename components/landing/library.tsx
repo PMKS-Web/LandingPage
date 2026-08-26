@@ -1,5 +1,6 @@
 import Mechanism from '@/components/pmks/mechanism'
 import Kicker from './kicker'
+import { APP_LIBRARY } from './links'
 
 /**
  * Six of the library's families, each one running. Different mechanisms, not
@@ -32,7 +33,7 @@ export default function Library() {
           </p>
         </div>
         <a
-          href="https://app.pmksplus.com"
+          href={APP_LIBRARY}
           className="mt-4 hidden whitespace-nowrap border-b border-indigo-100 pb-0.5 text-sm text-indigo-500 hover:opacity-75 lg:mt-0 lg:block"
         >
           Browse the mechanism library
@@ -63,7 +64,7 @@ export default function Library() {
             </p>
           </div>
           <a
-            href="https://app.pmksplus.com"
+            href={APP_LIBRARY}
             className="mt-3 self-start border-b border-indigo-100 pb-0.5 text-sm font-medium text-indigo-700 hover:opacity-75 lg:text-[14.5px]"
           >
             See all eight families

@@ -3,6 +3,7 @@
 import MechanismView from '@/components/pmks/mechanism-view'
 import { useMechanism } from '@/components/pmks/use-mechanism'
 import Transport from './transport'
+import { APP, APP_LIBRARY } from './links'
 
 /**
  * A four-bar, running, with the page's opening words laid over it.
@@ -60,13 +61,13 @@ function Copy() {
       </p>
       <div className="mb-0 flex flex-col gap-2.5 lg:mb-7 lg:flex-row lg:gap-3">
         <a
-          href="https://app.pmksplus.com"
+          href={APP}
           className="rounded bg-indigo-500 px-4 py-[15px] text-center text-[15.5px] font-medium text-white hover:opacity-90 lg:px-7 lg:py-4 lg:text-base"
         >
           Start building
         </a>
         <a
-          href="#library"
+          href={APP_LIBRARY}
           className="rounded border border-indigo-100 bg-white px-4 py-[15px] text-center text-[15.5px] font-medium text-indigo-700 hover:opacity-75 lg:px-7 lg:py-4 lg:text-base"
         >
           Try an example

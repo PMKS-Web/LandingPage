@@ -1,4 +1,5 @@
 import Kicker from './kicker'
+import { CONTACT } from './links'
 
 const RIVALS = ['MotionGen', 'SAM', 'Working Model', 'SolidWorks']
 
@@ -45,7 +46,7 @@ export default function Instructors() {
             is open source under MIT.
           </p>
           <a
-            href="mailto:help@pmksplus.com"
+            href={CONTACT}
             className="inline-block rounded bg-indigo-500 px-[18px] py-3.5 text-sm text-white hover:opacity-90 lg:px-6 lg:py-[15px] lg:text-[15px]"
           >
             <span className="lg:hidden">help@pmksplus.com</span>
