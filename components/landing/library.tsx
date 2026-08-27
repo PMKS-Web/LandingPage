@@ -1,6 +1,7 @@
 import Mechanism from '@/components/pmks/mechanism'
 import Kicker from './kicker'
 import { APP_LIBRARY } from './links'
+import { TEMPLATE } from './template-links'
 
 /**
  * Six of the library's forty-two, each one running.
@@ -13,13 +14,19 @@ import { APP_LIBRARY } from './links'
  * hydraulic ram rather than by a crank, Hoeken's straight line and a six-bar
  * with a slider.
  */
-const CARDS = [
-  { id: 'slider', name: 'Slider-Crank' },
-  { id: 'flywheel', name: 'Engine with a Flywheel' },
-  { id: 'yoke', name: 'Scotch Yoke' },
-  { id: 'cylinderBoom', name: 'Cylinder-Driven Boom' },
-  { id: 'hoeken', name: 'Hoeken Straight-Line' },
-  { id: 'sixbar', name: 'Six-Bar with Slider' },
+/**
+ * `open` is where the card goes. Four of the six are library templates and open
+ * as themselves; the straight-line and the six-bar are drawn here rather than
+ * taken from the catalogue, so they open the library instead of pretending to
+ * be a template that is not there.
+ */
+const CARDS: { id: string; name: string; open: string }[] = [
+  { id: 'slider', name: 'Slider-Crank', open: TEMPLATE.slider },
+  { id: 'flywheel', name: 'Engine with a Flywheel', open: TEMPLATE.flywheel },
+  { id: 'yoke', name: 'Scotch Yoke', open: TEMPLATE.yoke },
+  { id: 'cylinderBoom', name: 'Cylinder-Driven Boom', open: TEMPLATE.cylinderBoom },
+  { id: 'hoeken', name: 'Hoeken Straight-Line', open: APP_LIBRARY },
+  { id: 'sixbar', name: 'Six-Bar with Slider', open: APP_LIBRARY },
 ]
 
 export default function Library() {
@@ -46,16 +53,26 @@ export default function Library() {
       </div>
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-5">
+        {/* The copy says every one opens in a click, so every one is a link —
+            reachable by keyboard and by a crawler, not a div with a picture in
+            it. */}
         {CARDS.map((card) => (
-          <div
+          <a
             key={card.id}
-            className="overflow-hidden rounded-card border border-ink-100 bg-white"
+            href={card.open}
+            className="group block overflow-hidden rounded-card border border-ink-100 bg-white transition hover:border-indigo-100 hover:shadow-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
           >
             <Mechanism id={card.id} className="h-[118px] w-full lg:h-[196px]" />
-            <div className="border-t border-ink-100 px-2.5 py-2.5 text-[12.5px] font-medium lg:px-4 lg:py-3.5 lg:text-[15px]">
+            <div className="flex items-center justify-between gap-2 border-t border-ink-100 px-2.5 py-2.5 text-[12.5px] font-medium lg:px-4 lg:py-3.5 lg:text-[15px]">
               {card.name}
+              <span
+                aria-hidden="true"
+                className="text-indigo-500 opacity-0 transition group-hover:opacity-100"
+              >
+                &rarr;
+              </span>
             </div>
-          </div>
+          </a>
         ))}
 
         <div className="col-span-2 flex flex-col justify-between rounded-card bg-indigo-50 p-5 lg:p-[26px_28px]">

@@ -51,19 +51,19 @@ const payloads = Object.fromEntries(
 const SHOTS = [
   {
     /**
-     * The social card: the top of this page, as it is.
+     * The social card, from the page that exists to be it.
      *
-     * Not a drawn card. Twelve hundred by six hundred and thirty is almost
-     * exactly the header and the hero band at this width, so what a link
-     * preview shows is the headline over a real mechanism — the page's own
-     * first screen rather than a picture of it made separately, which is the
-     * one thing that can never go stale against it.
+     * Still a photograph of the real thing — the mechanism on it is solved and
+     * drawn by the same engine as the one in the hero — but composed for a feed
+     * rather than cropped out of a page. At the ~500px a card is actually shown
+     * at, a screenshot of the whole hero turned its nav, buttons and paragraph
+     * into texture.
      *
      * This one wants the landing page running, not the app: `npm run dev` here,
      * or PMKS_SITE_URL=... for a deploy preview.
      */
     name: 'og',
-    site: true,
+    site: '/og-card',
     width: 1200,
     height: 630,
     deliver: 1200,
@@ -203,7 +203,7 @@ for (const shot of SHOTS) {
     // Not fatal: the app's own pictures should still be taken by a run started
     // without this page up.
     const reached = await page
-      .goto(SITE, { waitUntil: 'networkidle' })
+      .goto(SITE + (shot.site === true ? '' : shot.site), { waitUntil: 'networkidle' })
       .then(() => true)
       .catch(() => false);
     if (!reached) {

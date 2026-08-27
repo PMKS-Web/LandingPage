@@ -11,11 +11,9 @@ import Cta from '@/components/landing/cta'
 import Footer from '@/components/landing/footer'
 import Analytics from '@/components/landing/analytics'
 
-export const metadata = {
-  title: 'PMKS+ | Web-based Linkage Analysis Tool',
-  description:
-    'Build and simulate planar mechanisms in your browser. Position, velocity, acceleration and forces, with no installation, account or upload.',
-}
+// Title, description, canonical, card and structured data all live in
+// app/layout.tsx. This page had its own copy of the first two, which quietly
+// won over the layout's and kept the old title on the one page that matters.
 
 export default function Home() {
   return (

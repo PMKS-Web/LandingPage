@@ -1,12 +1,12 @@
 import Kicker from './kicker'
-import { CONTACT } from './links'
+import { CONTACT, PAPER } from './links'
 
 const RIVALS = ['MotionGen', 'SAM', 'Working Model', 'SolidWorks']
 
 const ROWS: [string, string, string, string, string, string][] = [
-  ['Cost', 'Free, MIT', 'Free', 'Licence', 'Licence', 'Seat licence'],
+  ['Cost', 'Free, MIT', 'Free', 'License', 'License', 'Seat license'],
   ['Runs in the browser', 'Yes', 'Yes', 'Windows', 'Desktop', 'Desktop'],
-  ['Account required', 'None', 'To save', 'No', 'No', 'Licence login'],
+  ['Account required', 'None', 'To save', 'No', 'No', 'License login'],
   [
     'Kinematics',
     'Position, velocity, acceleration',
@@ -37,20 +37,28 @@ export default function Instructors() {
             <span className="hidden lg:inline">
               {' '}
               When a student&rsquo;s mechanism cannot be analyzed yet, the app explains exactly what
-              is missing and takes them to it, and a built in tutorial walks them from a blank grid
+              is missing and takes them to it, and a built-in tutorial walks them from a blank grid
               to their first velocity graph.
             </span>
           </p>
           <p className="mb-[18px] text-[15.5px] leading-[1.65] text-ink-700 lg:mb-6 lg:text-[17px]">
             Used in courses at Worcester Polytechnic Institute and Oregon State for years. The code
-            is open source under MIT.
+            is open source under MIT, and the tool is written up in{' '}
+            <a
+              href={PAPER}
+              className="border-b border-indigo-100 text-indigo-700 hover:opacity-75"
+            >
+              an ASEE paper
+            </a>{' '}
+            if you need something to cite.
           </p>
           <a
             href={CONTACT}
             className="inline-block rounded bg-indigo-500 px-[18px] py-3.5 text-sm text-white hover:opacity-90 lg:px-6 lg:py-[15px] lg:text-[15px]"
           >
-            <span className="lg:hidden">help@pmksplus.com</span>
-            <span className="hidden lg:inline">Course adoption: help@pmksplus.com</span>
+            {/* What happens next, rather than an address to compose against. */}
+            <span className="lg:hidden">Ask about using it in a course</span>
+            <span className="hidden lg:inline">Ask about using PMKS+ in your course</span>
           </a>
         </div>
 
@@ -61,14 +69,14 @@ export default function Instructors() {
             scrollbar under it looks like a table that has been cut off. */}
         <div className="min-w-0">
           <Kicker tone="grey" className="mb-2 lg:hidden">
-            Swipe the table sideways
+            Swipe the table sideways &mdash; the first two columns stay
           </Kicker>
           <div className="min-w-0 overflow-x-auto rounded-card bg-white p-5 shadow-card lg:p-[28px_32px]">
           <table className="w-full min-w-[600px] border-collapse text-sm">
             <thead>
               <tr>
-                <th className="pb-3.5 pr-3.5 text-left" />
-                <th className="px-3.5 pb-3.5 text-left text-[15px] font-medium text-indigo-500">
+                <td className="sticky left-0 z-10 w-[132px] min-w-[132px] bg-white pb-3.5 pr-3.5 lg:static lg:w-auto lg:min-w-0" />
+                <th className="sticky left-[132px] z-10 bg-white px-3.5 pb-3.5 text-left text-[15px] font-medium text-indigo-500 lg:static">
                   PMKS+
                 </th>
                 {RIVALS.map((name, i) => (
@@ -85,14 +93,26 @@ export default function Instructors() {
             </thead>
             <tbody>
               {ROWS.map(([label, ...cells]) => (
-                <tr key={label} className="border-t border-ink-100">
-                  <td className="whitespace-nowrap py-[13px] pr-3.5 text-[13px] text-ink-400">{label}</td>
+                <tr key={label} className="border-t border-ink-100 lg:border-t">
+                  {/* The feature name is a heading for its row, not a cell in
+                      it: a screen reader reading "Free, MIT" out of context has
+                      not said what is free. */}
+                  {/* The two columns a comparison is read against stay put
+                      while the rest scrolls under them: a value four columns
+                      out means nothing once the feature name it belongs to has
+                      left the screen. */}
+                  <th
+                    scope="row"
+                    className="sticky left-0 z-10 w-[132px] min-w-[132px] whitespace-normal border-t border-ink-100 bg-white py-[13px] pr-3.5 text-left text-[13px] font-normal text-ink-400 lg:static lg:w-auto lg:min-w-0 lg:whitespace-nowrap lg:border-0"
+                  >
+                    {label}
+                  </th>
                   {cells.map((cell, i) => (
                     <td
                       key={i}
                       className={
                         i === 0
-                          ? 'bg-indigo-50 px-3.5 py-[13px] font-medium'
+                          ? 'sticky left-[132px] z-10 border-t border-ink-100 bg-indigo-50 px-3.5 py-[13px] font-medium lg:static lg:border-0'
                           : `py-[13px] text-ink-700 ${
                               i === cells.length - 1 ? 'pl-3.5' : 'px-3.5'
                             }`

@@ -8,7 +8,7 @@ const EXPORTS = [
   { short: 'CSV', full: 'CSV' },
   { short: 'Excel', full: 'Excel workbook' },
   { short: 'Graph images', full: 'Graph images' },
-  { short: 'Report', full: 'Print ready report' },
+  { short: 'Report', full: 'Print-ready report' },
 ]
 
 export default function Analyze() {
@@ -31,7 +31,7 @@ export default function Analyze() {
       <div>
         <Kicker className="mb-3 lg:mb-4">Analyze</Kicker>
         <h2 className="mb-3 text-[25px] font-medium leading-[1.2] tracking-[-0.015em] lg:mb-4 lg:text-[34px] lg:leading-[1.15] lg:tracking-[-0.02em]">
-          Numbers you can hand in.
+          Results you can check, not just collect.
         </h2>
         <p className="mb-4 text-[15.5px] leading-[1.65] text-ink-700 lg:mb-[18px] lg:text-[17px]">
           <span className="lg:hidden">
@@ -40,7 +40,7 @@ export default function Analyze() {
           </span>
           <span className="hidden lg:inline">
             Pick a joint for its position, velocity and acceleration. Pick a link for its angular
-            motion and its centre of mass. Force analysis gives joint reactions and the torque or
+            motion and its center of mass. Force analysis gives joint reactions and the torque or
             force the motor has to supply, in static equilibrium or in full dynamics.
           </span>
         </p>

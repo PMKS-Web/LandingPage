@@ -1,6 +1,7 @@
 import './css/style.css'
 
 import type { Metadata } from 'next'
+import { SITE } from './site'
 import { Roboto, Roboto_Mono } from 'next/font/google'
 
 const roboto = Roboto({
@@ -17,7 +18,15 @@ const robotoMono = Roboto_Mono({
   display: 'swap',
 })
 
-const TITLE = 'PMKS+ | Web-based Linkage Analysis Tool'
+/**
+ * Names the category, not only the brand.
+ *
+ * "Web-based Linkage Analysis Tool" is what the thing is, but nobody searches
+ * for it in those words: the phrases that bring people here are "planar
+ * mechanism simulator", "linkage simulator", "kinematic analysis". The acronym
+ * is spelled out in the hero's opening line for the same reason.
+ */
+const TITLE = 'PMKS+ — Free Planar Mechanism & Linkage Simulator'
 
 /** For a search result, which shows about 155 characters. */
 const DESCRIPTION =
@@ -31,17 +40,6 @@ const DESCRIPTION =
 const CARD_DESCRIPTION =
   'Build and simulate planar mechanisms in your browser \u2014 position, velocity, ' +
   'acceleration and forces. No install, no account.'
-
-/**
- * Where this page is being served from, which is what an `og:image` has to be
- * absolute against.
- *
- * A deploy preview is not pmksplus.com, and a card pointing at pmksplus.com
- * from a preview fetches whatever is live there instead — or, before this page
- * ships, nothing at all. Set NEXT_PUBLIC_SITE_URL in the preview's environment
- * to have it describe itself.
- */
-const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://pmksplus.com'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
@@ -73,10 +71,49 @@ export const metadata: Metadata = {
   },
 }
 
+/**
+ * What the page is, in the vocabulary a search engine reads.
+ *
+ * The same facts the page states in prose — free, in a browser, for teaching
+ * mechanism kinematics — said once more in a form a machine can quote in a
+ * result. `offers` at zero is the part that earns the "Free" a reader sees.
+ */
+const STRUCTURED_DATA = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'PMKS+',
+  alternateName: 'Planar Mechanism Kinematic Simulator Plus',
+  applicationCategory: 'EducationalApplication',
+  applicationSubCategory: 'Engineering simulation',
+  operatingSystem: 'Any — runs in a web browser',
+  browserRequirements: 'Requires JavaScript. Runs in any modern browser.',
+  url: SITE,
+  installUrl: 'https://app.pmksplus.com',
+  image: `${SITE}/images/social-card.png`,
+  description: DESCRIPTION,
+  license: 'https://opensource.org/licenses/MIT',
+  isAccessibleForFree: true,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  author: {
+    '@type': 'CollegeOrUniversity',
+    name: 'Worcester Polytechnic Institute',
+    url: 'https://www.wpi.edu',
+  },
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${roboto.variable} ${robotoMono.variable}`}>
-      <body className="bg-white font-sans text-ink-900 antialiased">{children}</body>
+      <body className="bg-white font-sans text-ink-900 antialiased">
+        <main>{children}</main>
+        <script
+          type="application/ld+json"
+          // The object above, not markup: JSON.stringify cannot emit a tag, and
+          // the alternative is hand-written JSON that drifts from the metadata
+          // beside it.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(STRUCTURED_DATA) }}
+        />
+      </body>
     </html>
   )
 }
