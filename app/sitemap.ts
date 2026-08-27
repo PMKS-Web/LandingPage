@@ -1,16 +1,22 @@
 import type { MetadataRoute } from 'next'
+import { MECHANISM_PAGES } from '@/content/mechanisms'
 import { SITE } from './site'
 
 /**
- * One page, for now.
+ * Everything meant to be found.
  *
- * It exists at all so the domain can be submitted to Search Console and so the
- * per-mechanism pages have somewhere to be listed when they are written.
+ * `/og-card` is deliberately absent: it exists to be photographed, not read.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
+  const now = new Date()
   return [
     // `changeFrequency` and `priority` are not in this Next version's type and
     // are advisory to crawlers anyway.
-    { url: SITE, lastModified: new Date() },
+    { url: SITE, lastModified: now },
+    { url: `${SITE}/validation`, lastModified: now },
+    ...MECHANISM_PAGES.map((page) => ({
+      url: `${SITE}/mechanisms/${page.slug}`,
+      lastModified: now,
+    })),
   ]
 }

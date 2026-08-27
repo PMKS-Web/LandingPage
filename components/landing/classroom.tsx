@@ -1,5 +1,5 @@
 import Kicker from './kicker'
-import { VERIFICATION } from './links'
+
 
 /**
  * One line of provenance, straight under the hero where a claim is cheapest to
@@ -26,8 +26,8 @@ export default function Classroom() {
         <span className="hidden lg:inline">
           {' '}
           Solver output is checked row by row against an independent implementation —{' '}
-          <a href={VERIFICATION} className="border-b border-indigo-100 text-indigo-700 hover:opacity-75">
-            the comparison suite is public
+          <a href="/validation" className="border-b border-indigo-100 text-indigo-700 hover:opacity-75">
+            here is the methodology, and its limits
           </a>
           .
         </span>

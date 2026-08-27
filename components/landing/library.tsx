@@ -2,6 +2,7 @@ import Mechanism from '@/components/pmks/mechanism'
 import Kicker from './kicker'
 import { APP_LIBRARY } from './links'
 import { TEMPLATE } from './template-links'
+import { MECHANISM_PAGES } from '@/content/mechanisms'
 
 /**
  * Six of the library's forty-two, each one running.
@@ -92,6 +93,27 @@ export default function Library() {
             See all eight families
           </a>
         </div>
+      </div>
+
+      {/* Guides, as ordinary links. The cards open the app because that is what
+          a card of a running mechanism should do; these are for the reader who
+          arrived wanting to know what a quick-return actually is. */}
+      <div className="mt-6 border-t border-ink-100 pt-5 lg:mt-8 lg:pt-6">
+        <Kicker tone="grey" className="mb-2.5">
+          Guides
+        </Kicker>
+        <ul className="flex flex-wrap gap-x-5 gap-y-2">
+          {MECHANISM_PAGES.map((page) => (
+            <li key={page.slug}>
+              <a
+                href={`/mechanisms/${page.slug}`}
+                className="border-b border-indigo-100 text-[14.5px] text-indigo-700 hover:opacity-75 lg:text-[15px]"
+              >
+                {page.h1}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   )

@@ -16,7 +16,7 @@ const ROWS: [string, string, string, string, string, string][] = [
     'Full 3D',
   ],
   ['Force analysis', 'Static and dynamic', 'Limited', 'Yes', 'Yes', 'Yes'],
-  ['Synthesis', 'Three position', 'Its speciality', 'Yes', 'No', 'No'],
+  ['Synthesis', 'Three position', 'Its specialty', 'Yes', 'No', 'No'],
   ['Sharing', 'A URL', 'Cloud link', 'File', 'File', 'File or PDM'],
 ]
 

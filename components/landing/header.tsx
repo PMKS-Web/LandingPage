@@ -10,11 +10,13 @@ import logo from '@/public/images/PMKS_logo.png'
  * course — which is the reader least likely to be at a desk when they first
  * hear about it.
  */
+// Rooted at `/`, not bare fragments: the same header sits on the mechanism
+// guides and the validation page, where `#build` points at nothing.
 const NAV = [
-  { label: 'Build', href: '#build' },
-  { label: 'Analyze', href: '#analyze' },
-  { label: 'Library', href: '#library' },
-  { label: 'For instructors', href: '#instructors', onPhone: true },
+  { label: 'Build', href: '/#build' },
+  { label: 'Analyze', href: '/#analyze' },
+  { label: 'Library', href: '/#library' },
+  { label: 'For instructors', href: '/#instructors', onPhone: true },
   { label: 'GitHub', href: GITHUB },
 ]
 

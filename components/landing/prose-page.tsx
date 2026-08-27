@@ -6,7 +6,7 @@ import Kicker from './kicker'
  * The chrome and the measure for a page that is mostly words.
  *
  * The home page is a stack of full-width bands; these are documents. Same
- * header and footer so they are recognisably the same site, one column at a
+ * header and footer so they are recognizably the same site, one column at a
  * readable measure, and a lede that a search result can quote.
  */
 export default function ProsePage({

@@ -2,8 +2,10 @@
 module.exports = {
   content: [
     './app/**/*.{js,ts,jsx,tsx}',
-    './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
+    // The mechanism pages' prose lives here, and its classes are just as real
+    // as the ones in a component — left out, Tailwind purges every one of them.
+    './content/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {

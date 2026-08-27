@@ -82,12 +82,26 @@ host that serves the build as files has nothing behind it — every picture come
 up broken. `npm run shots` already writes each one at the width the page serves
 it at, so there is nothing lost by that.
 
+## Pages
+
+| Path | What it is |
+| --- | --- |
+| `/` | The landing page |
+| `/mechanisms/<slug>` | One guide per mechanism family, each with the linkage running on it |
+| `/validation` | How the solver is verified, and what that does not cover |
+| `/og-card` | The social card's subject. `noindex`, not in the sitemap |
+
+`app/robots.ts` and `app/sitemap.ts` generate `/robots.txt` and `/sitemap.xml`
+from `app/site.ts`, so a deploy preview describes itself. Set
+`NEXT_PUBLIC_SITE_URL` in the preview's environment.
+
 ## Layout
 
 | Path | What is in it |
 | --- | --- |
 | `app/page.tsx` | The page, as a list of its sections |
 | `components/landing/` | Those sections |
+| `content/mechanisms.tsx` | The mechanism guides, as data |
 | `components/pmks/` | The mechanism runtime: load, play, draw |
 | `engine/` | The vendored PMKS+ engine and the two asset pipelines |
 | `public/mechanisms/` | Generated — solved geometry, one file per linkage |

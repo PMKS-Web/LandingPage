@@ -4,6 +4,7 @@ const LINKS = [
   { label: 'Open PMKS+', href: APP },
   { label: 'GitHub', href: GITHUB },
   { label: 'Mechanism library', href: APP_LIBRARY },
+  { label: 'How it is verified', href: '/validation' },
   { label: 'Contact', href: CONTACT },
 ]
 
