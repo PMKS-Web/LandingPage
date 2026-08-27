@@ -21,5 +21,32 @@ export const CONTACT = 'mailto:help@pmksplus.com'
 export const VERIFICATION =
   'https://github.com/PMKS-Web/Planar-Mechanism-Kinematic-Simulator/tree/main/src/tests/verification'
 
-/** The peer-reviewed write-up, for an instructor who wants a citation. */
-export const PAPER = 'https://peer.asee.org/a-tool-to-analyze-and-synthesize-planar-mechanisms'
+/**
+ * The peer-reviewed record, for an instructor who wants something to cite.
+ *
+ * Titles and links only. ASEE's PEER site refuses an automated fetch, so author
+ * lists and years are not repeated here rather than repeated wrongly — each
+ * link carries its own front matter.
+ */
+export const PAPERS = [
+  {
+    title: 'A Tool to Analyze and Synthesize Planar Mechanisms',
+    href: 'https://peer.asee.org/a-tool-to-analyze-and-synthesize-planar-mechanisms',
+    note: 'The tool itself.',
+  },
+  {
+    title:
+      'Laboratory on Experimental Verification of Four-Bar and Crank-Slider Linkages in a Senior-Level Design and Modeling Course',
+    href: 'https://peer.asee.org/laboratory-on-experimental-verification-of-four-bar-and-crank-slider-linkages-in-a-senior-level-design-and-modeling-course',
+    note: 'A lab built around it, checked against hardware.',
+  },
+  {
+    title:
+      'Improving Features and User Experience of a Web-Based Linkage Analysis Tool Through User Studies',
+    href: 'https://peer.asee.org/improving-features-and-user-experience-of-a-web-based-linkage-analysis-tool-through-user-studies',
+    note: 'What students did with it, and what changed as a result.',
+  },
+] as const
+
+/** The first of them, where only one will fit. */
+export const PAPER = PAPERS[0].href

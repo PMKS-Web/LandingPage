@@ -9,6 +9,11 @@ import panel from '@/public/images/app/phone-panel.png'
  * Its own row rather than a line in the instructor section, because "it works
  * on the thing in your pocket" is the objection a link in a syllabus actually
  * runs into, and a claim about a screen is worth a picture of that screen.
+ *
+ * About what it can do rather than how the gestures work. Which finger opens
+ * which menu is what the app's own tutorial is for; a reader deciding whether
+ * to open this on a phone at all wants to know it is the whole tool, and what
+ * that is good for once you are holding it.
  */
 export default function Phone() {
   return (
@@ -23,18 +28,19 @@ export default function Phone() {
         </h2>
         <p className="mb-4 text-[15.5px] leading-[1.65] text-ink-700 lg:mb-[18px] lg:text-[17px]">
           <span className="lg:hidden">
-            Not a cut-down viewer: the whole thing. A held finger opens the menu a right button
-            opens, and the mode panel becomes a sheet that pushes the drawing clear rather than
-            covering it.
+            Not a cut-down viewer: the whole thing. Draw a linkage, ground it, analyze it, read the
+            graphs — on the phone in your pocket.
           </span>
           <span className="hidden lg:inline">
-            Not a cut-down viewer: the whole thing. A held finger opens the menu that a right button
-            opens on a laptop, so mechanisms can be built as well as read, and the mode panel becomes
-            a sheet that pulls up over the drawing and pushes it clear rather than covering it.
+            Not a cut-down viewer — the whole thing. Draw a linkage, weld and slot it, drive it,
+            and read position, velocity, acceleration and forces off it, all on the phone in your
+            pocket. Nothing is desktop-only.
           </span>
         </p>
-        <p className="hidden text-[15.5px] leading-[1.65] text-ink-700 lg:block lg:text-[17px]">
-          A link you send in class opens on whatever the person you sent it to is holding.
+        <p className="text-[15.5px] leading-[1.65] text-ink-700 lg:text-[17px]">
+          Which turns out to matter away from a desk. Photograph a real machine with the phone&rsquo;s
+          camera, drop the picture behind the grid, and trace the linkage straight onto it. Or hand
+          someone your phone in a lab and show them the idea moving.
         </p>
       </div>
       <div className="grid grid-cols-2 gap-3 lg:gap-5">

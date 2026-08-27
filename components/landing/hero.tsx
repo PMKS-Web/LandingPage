@@ -34,13 +34,21 @@ export default function Hero() {
       {/* Out of flow from `lg`, so it has to fit the canvas's 540px on its own:
           nothing below pushes down to make room for it. */}
       <div className="px-5 pb-6 pt-7 lg:absolute lg:left-14 lg:top-14 lg:max-w-[600px] lg:p-0">
-        <h1 className="mb-3.5 text-[31px] font-bold leading-[1.06] tracking-[-0.035em] lg:mb-4 lg:text-[48px] lg:leading-[1.05]">
-          Planar mechanism simulation and analysis. Zero setup.
+        <h1 className="mb-3.5 text-[31px] font-bold leading-[1.06] tracking-[-0.035em] lg:mb-4 lg:text-[52px] lg:leading-[1.03]">
+          Serious linkage analysis.
+          <br />
+          Zero setup.
         </h1>
+        {/* The search terms live here rather than in the headline. "Planar
+            mechanism simulator", "linkage simulator" and "kinematic analysis"
+            are what people type; they are also just what the tool is, so the
+            sentence that names it can carry them without being written for a
+            crawler. */}
         <p className="mb-5 max-w-[30em] text-[15.5px] leading-[1.6] text-ink-700 lg:mb-6 lg:text-[18px] lg:leading-[1.55]">
-          PMKS+ — the Planar Mechanism Kinematic Simulator — builds and simulates linkages in your
-          browser: four-bars, slider-cranks, six-bars and whole machines, with position, velocity,
-          acceleration and forces. No installation, account, or upload.
+          The Planar Mechanism Kinematic Simulator (PMKS+) is a free linkage simulator that runs in
+          your browser: four-bars, slider-cranks, six-bars and whole machines, with kinematic
+          analysis of position, velocity and acceleration, and force analysis on top. No
+          installation, account, or upload.
         </p>
         <div className="mb-0 flex flex-col gap-2.5 lg:mb-6 lg:flex-row lg:gap-3">
           <a

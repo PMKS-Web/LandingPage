@@ -1,5 +1,5 @@
 import Kicker from './kicker'
-import { CONTACT, PAPER } from './links'
+import { CONTACT, PAPERS } from './links'
 
 const RIVALS = ['MotionGen', 'SAM', 'Working Model', 'SolidWorks']
 
@@ -43,15 +43,27 @@ export default function Instructors() {
           </p>
           <p className="mb-[18px] text-[15.5px] leading-[1.65] text-ink-700 lg:mb-6 lg:text-[17px]">
             Used in courses at Worcester Polytechnic Institute and Oregon State for years. The code
-            is open source under MIT, and the tool is written up in{' '}
-            <a
-              href={PAPER}
-              className="border-b border-indigo-100 text-indigo-700 hover:opacity-75"
-            >
-              an ASEE paper
-            </a>{' '}
-            if you need something to cite.
+            is open source under MIT.
           </p>
+          {/* Something to cite, and evidence that somebody already has. */}
+          <div className="mb-[18px] lg:mb-6">
+            <Kicker tone="grey" className="mb-2">
+              In the literature
+            </Kicker>
+            <ul className="space-y-1.5">
+              {PAPERS.map((paper) => (
+                <li key={paper.href} className="text-[14px] leading-[1.5] text-ink-600">
+                  <a
+                    href={paper.href}
+                    className="border-b border-indigo-100 text-indigo-700 hover:opacity-75"
+                  >
+                    {paper.title}
+                  </a>{' '}
+                  <span className="text-ink-400">{paper.note}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
           <a
             href={CONTACT}
             className="inline-block rounded bg-indigo-500 px-[18px] py-3.5 text-sm text-white hover:opacity-90 lg:px-6 lg:py-[15px] lg:text-[15px]"

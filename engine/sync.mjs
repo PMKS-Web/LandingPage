@@ -76,6 +76,12 @@ const WANTED = {
   flywheel: 'Flywheel_Engine',
   yoke: 'Scotch_Yoke',
   cylinderBoom: 'Cylinder_Boom',
+  whitworth: 'Whitworth_Quick_Return',
+  shaper: 'Shaper_Quick_Return',
+  stephenson: 'Stephenson_III',
+  watt: 'Watt_I',
+  dragLink: 'Drag_Link',
+  jansen: 'Jansen_Leg',
 };
 
 const linkages = readFileSync(
