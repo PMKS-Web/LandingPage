@@ -1,90 +1,110 @@
-# Free React / Next.js landing page template
+# pmksplus.com
 
-![Open React / Next.js template preview](https://user-images.githubusercontent.com/2683512/231426532-c71f4291-4813-401b-a569-ada47fe13efa.png)
+The landing page for PMKS+.
 
-**Open** is a **free React / Next.js landing page template built with Tailwind CSS** for developers/makers who want to create a quick and professional landing page for their open source projects, SaaS products, online services, and more.
+**The app itself is at [app.pmksplus.com](https://app.pmksplus.com)** — free, in
+the browser, no account. Its source is in
+[Planar-Mechanism-Kinematic-Simulator](https://github.com/PMKS-Web/Planar-Mechanism-Kinematic-Simulator).
 
-Use it for whatever you want, and be sure to reach us out on [Twitter](https://twitter.com/Cruip_com) if you build anything cool/useful with it.
+## What PMKS+ is
 
-Created and maintained with ❤️ by [Cruip.com](https://cruip.com).
+A planar mechanism kinematic simulator, developed at Worcester Polytechnic
+Institute by student project teams as the successor to PMKS by Prof. Matthew I.
+Campbell at Oregon State. You draw a linkage the way you would sketch it, ground
+the frame, choose the joint the motor turns, and it runs: four-bars,
+slider-cranks, six-bars and whole machines, with welds, pins in slots, hydraulic
+cylinders and tracer points. It gives back position, velocity and acceleration
+for any joint or link, and joint reactions and motor torque in static
+equilibrium or full dynamics — exportable as CSV, an Excel workbook or a print
+ready report. A whole mechanism packs into one URL, so a class can pass them
+around like messages. Free and open source under MIT.
 
-*Version 1.0.0 built with the Cruip CSS is available [here](https://github.com/cruip/open-react-template/releases/tag/1.0.0).*
-*Version 2.0.3 built with Tailwind CSS and React + Vite is available [here](https://github.com/cruip/open-react-template/releases/tag/2.0.3).*
+## What this repo is
 
-## Live demo
+The marketing page in front of it: Next.js 13 (App Router) and Tailwind,
+deployed as a static site. Built originally on
+[Open](https://github.com/cruip/open-react-template) by Cruip; the page itself
+has since been rewritten.
 
-Check the live demo here 👉️ [https://open.cruip.com/](https://open.cruip.com/)
-
-## Open PRO
-
-[![Open Pro](https://user-images.githubusercontent.com/2683512/151177673-e56ade57-c98d-4c37-b315-d313bd14bb53.png)](https://cruip.com/)
-
-## Design files
-
-If you need the design files, you can download them from Figma's Community 👉 https://bit.ly/401KSUS
-
-## Usage
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-### Getting Started
-
-First, run the development server:
+## Running it
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## The mechanisms are the real thing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Every linkage that moves on this page — the four-bar in the hero, the quick
+return beside the sharing panel, the six cards in the library — is solved and
+drawn by PMKS+'s own code rather than by an animation of it. The app's model
+layer is vendored under `engine/vendor`, the linkages are written as fixtures
+against the app's own MATLAB-verified test harness, and a build step solves them
+and writes the geometry into `public/mechanisms`. The page ships no solver: it
+lays out what the app produced and moves it.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```bash
+npm run mechanisms   # re-solve the linkages after editing engine/src/linkages.ts
+npm run shots        # retake the screenshots the page embeds, and the social card
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Both read from a checkout of
+[Planar-Mechanism-Kinematic-Simulator](https://github.com/PMKS-Web/Planar-Mechanism-Kinematic-Simulator)
+beside this repo; `npm run shots` also wants that app's dev server up on port
+4200, and — for the social card, which is a photograph of this page's own first
+screen — this page running too. See [`engine/README.md`](engine/README.md) for
+what is vendored, how to re-sync it, and what the canvas does and does not draw.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+`npm run shots` checks what it took: every picture says which mode of the app it
+is supposed to be showing, the script asks the page before the shutter, and it
+exits non-zero if the answer is wrong. A mode press that quietly did not land is
+how a picture of the Analyze mode once shipped showing the Edit one.
 
-### Learn More
+## The social card
 
-To learn more about Next.js, take a look at the following resources:
+`public/images/social-card.png` is a photograph of `/og-card`, a page that
+exists only to be photographed: the mark, one line, and one mechanism drawn by
+the same engine as the hero's. A card is shown at about 500 pixels wide, and the
+whole hero at that size was nav, buttons and paragraph as illegible texture.
+`/og-card` is `noindex` and is not in the sitemap.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`og:image` has to be an absolute URL, and a deploy preview is not pmksplus.com —
+a card pointing at pmksplus.com from a preview fetches whatever is live there
+instead. Set `NEXT_PUBLIC_SITE_URL` in the preview's environment to have it
+describe itself.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Images
 
-### Deploy on Vercel
+`next/image` is set to `unoptimized`, so the five pictures on the page are
+served exactly as they sit in `public/`. The default loader answers from a
+`/_next/image` endpoint that only exists where a Next server is running, and a
+host that serves the build as files has nothing behind it — every picture comes
+up broken. `npm run shots` already writes each one at the width the page serves
+it at, so there is nothing lost by that.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Pages
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+| Path | What it is |
+| --- | --- |
+| `/` | The landing page |
+| `/mechanisms/<slug>` | One guide per mechanism family, each with the linkage running on it |
+| `/validation` | How the solver is verified, and what that does not cover |
+| `/og-card` | The social card's subject. `noindex`, not in the sitemap |
 
+`app/robots.ts` and `app/sitemap.ts` generate `/robots.txt` and `/sitemap.xml`
+from `app/site.ts`, so a deploy preview describes itself. Set
+`NEXT_PUBLIC_SITE_URL` in the preview's environment.
 
-### Support notes
-This template has been developed with the App Router (`app`) and React Server Components. If you’re unfamiliar with these beta features, you can find more information about them on the Next.js beta documentation page. So, please note that any request dealing with React (e.g. extra features, customisations, et cetera) is to be considered out of the support scope.
+## Layout
 
-For more information about what support covers, please see our (FAQs)[https://cruip.com/faq/].
-
-## Credits
-
-- [Nucleo](https://nucleoapp.com/)
-
-## Terms and License
-
-- Released under the [GPL](https://www.gnu.org/licenses/gpl-3.0.html).
-- Copyright 2023 [Cruip](https://cruip.com/).
-- Use it for personal and commercial projects, but please don’t republish, redistribute, or resell the template.
-- Attribution is not required, although it is really appreciated.
-
-## About Us
-
-We're an Italian developer/designer duo creating high-quality design/code resources for developers, makers, and startups.
-
-## Stay in the loop
-
-If you would like to know when we release new resources, you can follow us on [Twitter](https://twitter.com/Cruip_com), or you can subscribe to our monthly [newsletter](https://cruip.com/#subscribe).
+| Path | What is in it |
+| --- | --- |
+| `app/page.tsx` | The page, as a list of its sections |
+| `components/landing/` | Those sections |
+| `content/mechanisms.tsx` | The mechanism guides, as data |
+| `components/pmks/` | The mechanism runtime: load, play, draw |
+| `engine/` | The vendored PMKS+ engine and the two asset pipelines |
+| `public/mechanisms/` | Generated — solved geometry, one file per linkage |
+| `public/images/app/` | Generated — screenshots of the running app |
+| `public/images/social-card.png` | Generated — the link preview, shot from `/og-card` |
+| `components/landing/template-links.ts` | Generated by `engine/sync.mjs` — the app URL each card opens |

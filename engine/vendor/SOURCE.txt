@@ -1,0 +1,2 @@
+Copied from /Users/kohmei358/Github/Planar-Mechanism-Kinematic-Simulator
+by engine/sync.mjs — do not edit these files, edit them upstream.

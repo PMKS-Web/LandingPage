@@ -2,79 +2,57 @@
 module.exports = {
   content: [
     './app/**/*.{js,ts,jsx,tsx}',
-    './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
+    // The mechanism pages' prose lives here, and its classes are just as real
+    // as the ones in a component — left out, Tailwind purges every one of them.
+    './content/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
       colors: {
-        gray: {
-          100: '#EBF1F5',
-          200: '#D9E3EA',
-          300: '#C5D2DC',
-          400: '#9BA9B4',
-          500: '#707D86',
-          600: '#55595F',
-          700: '#33363A',
-          800: '#25282C',
-          900: '#151719',
+        // The app's own Material indigo and amber, so a page about PMKS+ is
+        // painted in the colours PMKS+ is painted in.
+        indigo: {
+          50: '#E8EAF6',
+          100: '#c5cae9',
+          200: '#9fa8da',
+          500: '#3f51b5',
+          700: '#303e9f',
+          900: '#1a237e',
+          950: '#151C63',
         },
-        purple: {
-          100: '#E8EAF6',
-          200: '#9FA8DA',
-          300: '#7986CB',
-          400: '#5C6BC0',
-          500: '#3F51B5',
-          600: '#3949AB',
-          700: '#303F9F',
-          800: '#283593',
-          900: '#1A237E',
+        amber: {
+          400: '#ffca28',
         },
-        yellow: {
-          50: '#FFC107'
-        }
-      },
-      spacing: {
-        '9/16': '56.25%',
-        '3/4': '75%',
-        '1/1': '100%',
+        // Material's neutral ramp, plus the two cool greys the app rules its
+        // canvas with — every hairline on this page is one of them.
+        ink: {
+          900: '#212121',
+          700: '#424242',
+          600: '#616161',
+          500: '#757575',
+          400: '#9E9E9E',
+          200: '#E0E2EC',
+          100: '#E6E6EA',
+        },
       },
       fontFamily: {
-        inter: ['var(--font-inter)', 'sans-serif'],
-        'architects-daughter': ['var(--font-architects-daughter)', 'sans-serif']
+        sans: ['var(--font-roboto)', 'Helvetica Neue', 'sans-serif'],
+        mono: ['var(--font-roboto-mono)', 'ui-monospace', 'monospace'],
       },
-      fontSize: {
-        xs: '0.75rem',
-        sm: '0.875rem',
-        base: '1rem',
-        lg: '1.125rem',
-        xl: '1.25rem',
-        '2xl': '1.5rem',
-        '3xl': '2rem',
-        '4xl': '2.5rem',
-        '5xl': '3.25rem',
-        '6xl': '4rem',
+      borderRadius: {
+        // One radius across the page: 5px on anything you press, 10px on
+        // anything that holds a picture.
+        DEFAULT: '5px',
+        card: '10px',
       },
-      inset: {
-        'full': '100%',
+      boxShadow: {
+        // Material elevation 6, which is what the app's own floating cards wear.
+        card: '0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12)',
       },
-      letterSpacing: {
-        tighter: '-0.02em',
-        tight: '-0.01em',
-        normal: '0',
-        wide: '0.01em',
-        wider: '0.02em',
-        widest: '0.4em',
-      },
-      minWidth: {
-        '10': '2.5rem',
-      },
-      scale: {
-        '98': '.98'
+      maxWidth: {
+        page: '1440px',
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
 }
