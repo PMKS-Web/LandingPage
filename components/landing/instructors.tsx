@@ -76,9 +76,9 @@ export default function Instructors() {
 
         {/* Seven rows and six columns will not fit a phone, and shrinking the
             type until it does makes the comparison unreadable rather than
-            small. It scrolls sideways inside its own card instead — said out
-            loud on a phone, because a table that runs off the edge with no
-            scrollbar under it looks like a table that has been cut off.
+            small. It scrolls sideways inside its own card instead. Nothing
+            says so in words: the third column is visibly cut by the card's
+            edge, which is what a thing you can scroll looks like.
 
             The column widths are fixed on a phone rather than left to the
             browser. Auto layout sizes a column to its widest cell, so "Runs in
@@ -88,9 +88,6 @@ export default function Instructors() {
             ended. Fixed widths make the offsets exact, and buy back enough
             room to keep a third column on screen. */}
         <div className="min-w-0">
-          <Kicker tone="grey" className="mb-2 lg:hidden">
-            Swipe the table sideways &mdash; the first two columns stay
-          </Kicker>
           {/* No horizontal padding on a phone: a sticky cell parks at the
               scroll container's edge, so any padding there is a gap the rest of
               the table scrolls through behind it. The inset lives on the cells
